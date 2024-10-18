@@ -1,11 +1,12 @@
 import express from 'express';
-import { getQuestions, postQuestion } from '../controllers/questionsController.js';
+import { getQuestions, getWrongQuestions, postQuestion } from '../controllers/questionsController.js';
 import { protectRoute } from '../middleware/authMiddleware.js';
 import { body } from 'express-validator';
 
 const router = express.Router();
 
-router.get('/', [
+router.get('/', protectRoute, getQuestions);
+router.post('/', [
     body('title')
     .isString()
     .withMessage('Title must be a string')
@@ -43,7 +44,7 @@ router.get('/', [
     .optional()
     .isBoolean()
     .withMessage('isMistake must be a boolean')
-], protectRoute, getQuestions);
-router.post('/', protectRoute, postQuestion);
+], protectRoute, postQuestion);
+router.get('/wrong', protectRoute, getWrongQuestions)
 
 export default router;
