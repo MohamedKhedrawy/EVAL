@@ -1,0 +1,29 @@
+import express from 'express';
+import { registerUser, loginUser, getMyInfo } from '../controllers/usersController.js';
+import {body} from 'express-validator'
+
+const router = express.Router();
+
+router.post('/register', [
+    //sanitization
+    body('name').trim().escape(),
+    body('email').normalizeEmail(),
+
+    //validation
+    body('name').isAlpha().withMessage('Name must be in alphapetical letters only.')
+    .isLength({min: 5}).withMessage('Name must be at least 5 characters'),
+    body('email').isEmail().withMessage('Enter a valid email.'),
+    body('password').isLength({min: 8}).withMessage('Password must be at least 8 characters.'),
+    body('confirmPassword').custom((value, {req}) => {
+        if (value !== req.body.password) {
+            throw new Error("Passwords don't match.")
+        }
+        return true;
+    })
+], registerUser);
+
+router.post('/login', loginUser);
+// router.post('/logout', logoutUser);
+router.post('/myinfo', getMyInfo);
+
+export default router
