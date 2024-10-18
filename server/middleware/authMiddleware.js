@@ -1,8 +1,7 @@
 import asyncHandler from 'express-async-handler';
 import 'dotenv/config'
-dotenv.config();
 
-const protectRoute = asyncHandler(
+export const protectRoute = asyncHandler(
     async (req, res, next) => {
         let token;
     

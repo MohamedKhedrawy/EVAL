@@ -2,9 +2,16 @@ import User from "../models/usersModel.js";
 import asyncHandler from "express-async-handler";
 import { verifyPassword, hashPassword } from "../utils/passwordAuth.js";
 import {generateToken} from '../utils/jwtAuth.js'
+import { validationResult } from "express-validator";
 
 export const registerUser = asyncHandler( async(req, res) => {
     const {name, email, password, confirmPassword} = req.body;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        res.status(400).json({errors: errors.array()});
+    }
 
     if (!name || !email || !password || !confirmPassword) {
         res.status(400);

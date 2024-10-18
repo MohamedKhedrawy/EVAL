@@ -1,8 +1,15 @@
 import asyncHandler from "express-async-handler";
 import Question from "../models/questionsModel.js";
+import { validationResult } from "express-validator";
 
 export const getQuestions = asyncHandler( async(req, res) => {
     let {course, maxDiff, noOfQ} = req.body;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        res.status(400).json({ errors: errors.array()});
+    }
 
     if(!course) {
         res.status(400);

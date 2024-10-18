@@ -1,6 +1,7 @@
 import express from 'express';
 import { registerUser, loginUser, getMyInfo } from '../controllers/usersController.js';
 import {body} from 'express-validator'
+import { protectRoute } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -24,6 +25,6 @@ router.post('/register', [
 
 router.post('/login', loginUser);
 // router.post('/logout', logoutUser);
-router.post('/myinfo', getMyInfo);
+router.post('/myinfo', protectRoute, getMyInfo);
 
 export default router
