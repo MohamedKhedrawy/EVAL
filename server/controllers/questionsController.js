@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Question from "../models/questionsModel.js";
 import { validationResult } from "express-validator";
-import {RepeatedQuestion} from '../models/shownQuestionsModel.js'
+import RepeatedQuestion from '../models/shownQuestionsModel.js'
 
 export const getQuestions = asyncHandler( async(req, res) => {
     let {userId, course, maxDiff, noOfQ} = req.body;

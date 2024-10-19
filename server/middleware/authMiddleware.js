@@ -8,6 +8,11 @@ export const protectRoute = asyncHandler(
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             try {
                 token = req.headers.authorization.split(' ')[1];
+
+                if(!token) {
+                    res.status(400);
+                    throw new Error('No token, Not authorized');
+                }
         
                 const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
