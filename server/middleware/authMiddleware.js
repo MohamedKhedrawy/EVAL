@@ -1,4 +1,6 @@
 import asyncHandler from 'express-async-handler';
+import User from '../models/usersModel.js';
+import jwt from 'jsonwebtoken';
 import 'dotenv/config'
 
 export const protectRoute = asyncHandler(
@@ -8,21 +10,20 @@ export const protectRoute = asyncHandler(
         if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
             try {
                 token = req.headers.authorization.split(' ')[1];
-
-                if(!token) {
-                    res.status(400);
-                    throw new Error('No token, Not authorized');
-                }
         
                 const decoded = jwt.verify(token, process.env.JWT_SECRET);
         
                 req.user = await User.findById(decoded.id).select('-password')
-                next();
             } catch (error) {
                 res.status(401);
-                console.log('error:', error);
                 throw new Error('Not Authorized');
             }
         }
+
+        if(!token) {
+            res.status(400);
+            throw new Error('No token, Not authorized');
+        }
+        next();
     }
 ) 

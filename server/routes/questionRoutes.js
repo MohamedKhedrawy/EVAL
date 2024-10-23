@@ -1,5 +1,5 @@
 import express from 'express';
-import { getQuestions, getWrongQuestions, postQuestion } from '../controllers/questionsController.js';
+import { clearRepeated, getQuestions, getWrongQuestions, postQuestion } from '../controllers/questionsController.js';
 import { protectRoute } from '../middleware/authMiddleware.js';
 import { body } from 'express-validator';
 
@@ -45,6 +45,8 @@ router.post('/', [
     .isBoolean()
     .withMessage('isMistake must be a boolean')
 ], protectRoute, postQuestion);
-router.get('/wrong', protectRoute, getWrongQuestions)
+router.get('/wrong', protectRoute, getWrongQuestions);
+router.post('/clear', protectRoute, clearRepeated);
+
 
 export default router;

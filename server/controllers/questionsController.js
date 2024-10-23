@@ -4,69 +4,115 @@ import { validationResult } from "express-validator";
 import RepeatedQuestion from '../models/shownQuestionsModel.js'
 
 export const getQuestions = asyncHandler( async(req, res) => {
-    let {userId, course, maxDiff, noOfQ} = req.body;
-
+    let { course, difficulty: maxDiff, noOfQ} = req.body;
+    const userId = req.user._id;
+    
     if(!course) {
         res.status(400);
         throw new Error('Enter the course');
     }
 
-    maxDiff = maxDiff ? maxDiff : 3;
-    noOfQ = noOfQ ? noOfQ : 30;
+    maxDiff = (maxDiff && maxDiff >= 0 && maxDiff <=3) ? maxDiff : 3;
+    noOfQ = (noOfQ && noOfQ > 0) ? noOfQ : 30;
 
     try {
-        //fetch new questions excluding repeated ones
-        const userEntry = await RepeatedQuestion.findOne({userId}).exec();
+        // fetch ref user and their repeated questions
+        let userEntry;
+        try {
+            userEntry = await RepeatedQuestion.findOne({userId}).exec();
+        } catch (error) {
+            res.status(400);
+            throw new Error('Failed to fetch user');
+        }
         const repeatedQuestions = userEntry ? userEntry.questionsId : [];
 
-        let test = await Question.find({
-            course, difficulty: { $lte: maxDiff, $gt: 0},
-            _id: {$nin: repeatedQuestions}
-        }).limit(noOfQ).exec()
+        //fetch new questions excluding repeated ones
+        let test = []
+        try {
+            test = await Question.find({
+                course, difficulty: { $lte: maxDiff, $gt: 0},
+                _id: {$nin: repeatedQuestions}
+            }).limit(noOfQ).exec()
+        } catch (error) {
+            res.status(400);
+            throw new Error('Failed to fetch new questions')
+        }
+
 
         //add 0 difficulty if we dont have enough questions and combine
         if (test.length < noOfQ) {
-           const remainingQuestionsDiff = await Question.find({
-            course, difficulty: 0,
-            _id: {$nin: repeatedQuestions}
-           }).limit(noOfQ - test.length).exec()
-           test = [...test, ...remainingQuestionsDiff];
+           let remainingQuestionsDiff = [];
+           try {
+                remainingQuestionsDiff = await Question.find({
+                course, difficulty: 0,
+                _id: {$nin: repeatedQuestions}
+               }).limit(noOfQ - test.length).exec()
+               test.push(...remainingQuestionsDiff);
+           } catch (error) {
+                res.status(400);
+                throw new Error('Failed to add 0 difficulty questions')
+           } 
         }
 
         //add repeated questions if we dont have enough questions and combine
         if (test.length < noOfQ) {
-            const remainingQuestionsRep = await Question.find({
-             course, difficulty: {$lte: maxDiff},
-             _id: {$in: repeatedQuestions}
-            }).limit(noOfQ - test.length).exec()
-            test = [...test, ...remainingQuestionsRep];
+            let remainingQuestionsRep = [];
+            try {
+                remainingQuestionsRep = await Question.find({
+                course, difficulty: {$lte: maxDiff},
+                _id: {$in: repeatedQuestions}
+                }).limit(noOfQ - test.length).exec()
+                test.push(...remainingQuestionsRep);
+            } catch (error) {
+                res.status(400);
+                throw new Error('Failed to add repeated questions');
+            } 
         }
-
         //include the the ids of the new repeated questions
-        const repeatedQuestionsIds = repeatedQuestions.map(q => q.id);
+        const testRepeatedQuestions = test.map(q => q._id);
+
+        let oldRepeatedQuestions = userEntry.questionsId
 
         //update or create the repeated questions list for this user
         if (userEntry) {
-            userEntry.repeatedQuestions.push(...repeatedQuestionsIds);
+            let uniqueRepeatedQuestions = testRepeatedQuestions.filter(newQuestion => 
+            !oldRepeatedQuestions.some(oldQuestion => oldQuestion.equals(newQuestion)))
+            userEntry.questionsId.push(...uniqueRepeatedQuestions);
             await userEntry.save();
         } else {
-            await RepeatedQuestion.create({
-                userId
+                await RepeatedQuestion.create({
+                userId,
+                questionsId: testRepeatedQuestions
             })
         }
 
-        if (test) {
-            res.status(200).json(test)
+        if ((test) && (test.length > 0)) {
+            res.status(200).json(test);
+        } else {
+            res.status(404);
+            throw new Error('No questions found');
         }
     } catch (error) {
+        res.status(400).json('Failed to retrieve questions');
+        throw new Error('Failed to retrieve questions');
+    }
+})
+
+export const clearRepeated = asyncHandler(async(req, res) => {
+    try {
+        const userId = req.user._id;
+        await RepeatedQuestion.deleteOne({userId});
+        res.status(200).json('Repeated questions cleared successfully')
+    } catch (error) {
         res.status(400);
-        throw new Error('error')
+        throw new Error('Failed to clear repeated questions');
     }
 })
 
 export const getWrongQuestions = asyncHandler(async(req, res) => {
     try {
-        const wrongQuestions = await Question.find({isMistake: true});
+        const {course} = req.body;
+        const wrongQuestions = await Question.find({isMistake: true, course});
         res.status(200).json(wrongQuestions);
     } catch (error) {
         res.status(400);

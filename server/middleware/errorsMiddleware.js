@@ -5,7 +5,7 @@ export const errorHandler = (err, req, res, next) => {
 
     res.json({
         message: err.message,
-        stack: process.env.ENV === 'dev' ? err.stack : null
+        stack: process.env.ENV === 'dev' ? err.stack : err.stack
     })
     next();
 }

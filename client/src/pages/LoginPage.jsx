@@ -46,6 +46,7 @@ import {login, reset} from '../features/auth/authSlice.js';
    }
 
    const onSubmit = (e) => {
+      const formData = new FormData(e.target)
       e.preventDefault();
       const userData = {email, password};
       dispatch(login(userData));

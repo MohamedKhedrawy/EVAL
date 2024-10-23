@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authSlice } from "../auth/authSlice";
+import questionService from './questionService.js';
 
 const initialState = {
+    params: {},
+    questions: [],
     isError: false,
     isSuccess: false,
     isLoading: false,
@@ -10,25 +12,26 @@ const initialState = {
     isSolved: false,
 }
 
-const getQuestions = createAsyncThunk('question/getQuestions', async() => {
+export const getQuestions = createAsyncThunk('question/getQuestions', async(questionParams, thunkAPI) => {
     try {
-        return await questionService.getQuestions();
+        const state = thunkAPI.getState();
+        return await questionService.getQuestions(questionParams);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
     }
 })
 
-const postQuestions = createAsyncThunk('question/getQuestions', async() => {
+export const postQuestions = createAsyncThunk('question/postQuestions', async(questionData, thunkAPI) => {
     try {
-        return await questionService.postQuestions();
+        return await questionService.postQuestion();
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
     }
 })
 
-const questionSlice = createSlice({
+export const questionSlice = createSlice({
     name: 'question',
     initialState,
     reducers: {
@@ -38,7 +41,11 @@ const questionSlice = createSlice({
             state.isLoading = false,
             state.message = '',
             state.isMistake = false,
-            state.isSolved = false,
+            state.isSolved = false
+        },
+
+        setParams: (state, action) => {
+            state.params = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -46,9 +53,10 @@ const questionSlice = createSlice({
         .addCase(getQuestions.pending, (state) => {
             state.isLoading = true;
         })
-        .addCase(getQuestions.fulfilled, (state) => {
+        .addCase(getQuestions.fulfilled, (state, action) => {
             state.isLoading = false;
             state.isSuccess = true;
+            state.questions = action.payload;
         })
         .addCase(getQuestions.rejected, (state, action) => {
             state.isLoading = false;
@@ -58,14 +66,11 @@ const questionSlice = createSlice({
         .addCase(postQuestions.pending, (state) => {
             state.isLoading = true;
         })
-        .addCase(postQuestions.pending, (state) => {
-            state.isLoading = true;
-        })
-        .addCase(postQuestions.pending, (state) => {
+        .addCase(postQuestions.fulfilled, (state) => {
             state.isLoading = false;
             state.isSuccess = true;
         })
-        .addCase(postQuestions.pending, (state, action) => {
+        .addCase(postQuestions.rejected, (state, action) => {
             state.isLoading = false;
             state.isError = true;
             state.message = action.payload;
@@ -73,5 +78,5 @@ const questionSlice = createSlice({
     }
 })
 
-export const {reset} = authSlice.actions;
-export default authSlice.reducer();
+export const {reset, setParams} = questionSlice.actions;
+export default questionSlice.reducer;
