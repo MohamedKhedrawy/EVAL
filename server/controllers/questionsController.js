@@ -71,12 +71,10 @@ export const getQuestions = asyncHandler( async(req, res) => {
         //include the the ids of the new repeated questions
         const testRepeatedQuestions = test.map(q => q._id);
 
-        let oldRepeatedQuestions = userEntry.questionsId
-
         //update or create the repeated questions list for this user
         if (userEntry) {
             let uniqueRepeatedQuestions = testRepeatedQuestions.filter(newQuestion => 
-            !oldRepeatedQuestions.some(oldQuestion => oldQuestion.equals(newQuestion)))
+            !repeatedQuestions.some(oldQuestion => oldQuestion.equals(newQuestion)))
             userEntry.questionsId.push(...uniqueRepeatedQuestions);
             await userEntry.save();
         } else {
@@ -93,7 +91,7 @@ export const getQuestions = asyncHandler( async(req, res) => {
             throw new Error('No questions found');
         }
     } catch (error) {
-        res.status(400).json('Failed to retrieve questions');
+        res.status(400);
         throw new Error('Failed to retrieve questions');
     }
 })
