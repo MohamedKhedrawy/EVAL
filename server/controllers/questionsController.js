@@ -4,7 +4,7 @@ import { validationResult } from "express-validator";
 import RepeatedQuestion from '../models/shownQuestionsModel.js'
 
 export const getQuestions = asyncHandler( async(req, res) => {
-    let { course, difficulty: maxDiff, noOfQ} = req.body;
+    let { course, difficulty: maxDiff, noOfQ} = req.query;
     const userId = req.user._id;
     
     if(!course) {
@@ -131,7 +131,6 @@ export const postQuestion = asyncHandler( async(req, res) => {
         throw new Error('Add all required fields');
     }
 
-    course = course ? course : 'any';
     difficulty = difficulty ? difficulty : 0;
 
     const newQuestion = await Question.create({

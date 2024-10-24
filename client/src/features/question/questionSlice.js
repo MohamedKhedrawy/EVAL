@@ -15,7 +15,8 @@ const initialState = {
 export const getQuestions = createAsyncThunk('question/getQuestions', async(questionParams, thunkAPI) => {
     try {
         const state = thunkAPI.getState();
-        return await questionService.getQuestions(questionParams);
+        const params = state.question.params
+        return await questionService.getQuestions(params);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
@@ -46,6 +47,9 @@ export const questionSlice = createSlice({
 
         setParams: (state, action) => {
             state.params = action.payload;
+        },
+        setQuestions: (state, action) => {
+            state.questions = action.payload;
         }
     },
     extraReducers: (builder) => {
@@ -57,6 +61,7 @@ export const questionSlice = createSlice({
             state.isLoading = false;
             state.isSuccess = true;
             state.questions = action.payload;
+            console.log(state.questions);
         })
         .addCase(getQuestions.rejected, (state, action) => {
             state.isLoading = false;
@@ -78,5 +83,5 @@ export const questionSlice = createSlice({
     }
 })
 
-export const {reset, setParams} = questionSlice.actions;
+export const {reset, setParams, setQuestions} = questionSlice.actions;
 export default questionSlice.reducer;

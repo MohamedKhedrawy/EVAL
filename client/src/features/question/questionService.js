@@ -1,9 +1,16 @@
 import asyncHandler from "express-async-handler";
 import axios from "axios";
 
-const getQuestions = asyncHandler(async(questionParams) => {
+const getQuestions = asyncHandler(async(params) => {
     try {
-        const questions = await axios.get('http://localhost:5173/questions', questionParams);
+        const token = localStorage.getItem('userToken');
+        const {course, difficulty, noOfQ} = params;
+        const questions = await axios.get('http://localhost:5000/api/questions', {
+            params: {course, difficulty, noOfQ},
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        });
         return questions.data;
     } catch (error) {
         console.error(error);
@@ -12,7 +19,7 @@ const getQuestions = asyncHandler(async(questionParams) => {
 
 const getWrongQuestions = asyncHandler(async(course) => {
     try {
-        const wrongQuestions = await axios.get('http://localhost:5173/questions', course);
+        const wrongQuestions = await axios.get('http://localhost:5000/api/questions/wrong', course);
         return wrongQuestions;
     } catch (error) {
         console.error(error);
@@ -21,7 +28,12 @@ const getWrongQuestions = asyncHandler(async(course) => {
 
 const postQuestion = asyncHandler(async(questionData) => {
     try {
-        return await axios.post('http://localhost:5173/questions', userData);
+        const token = localStorage.getItem('userToken')
+        return await axios.post('http://localhost:5000/api/questions', questionData, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
     } catch (error) {
         console.error(error);
     }

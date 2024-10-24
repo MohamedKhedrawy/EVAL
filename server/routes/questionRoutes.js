@@ -29,11 +29,11 @@ router.post('/', [
         return true;
       }),
 
-      body('course')
-      .isString()
-      .trim()
-      .notEmpty()
-      .withMessage('Enter the Course'),
+      // body('course')
+      // .isString()
+      // .trim()
+      // .notEmpty()
+      // .withMessage('Enter the Course'),
 
     body('difficulty')
     .isInt({ min: 0, max: 3 })
