@@ -7,6 +7,10 @@ const TestPage = () => {
 
   const [isFetch, setIsFetch] = useState(false);
   const [selectedAnswers, setSelectedAnswers] = useState({});
+  const [totalScore, setTotalScore] = useState(0);
+  const [isTestOver, setIsTestOver] = useState(false)
+  const [scores, setScores] = useState([]);
+  const [rightAnswers, setRightAnswers] = useState([])
 
   const {params, questions, isError, isSuccess, isLoading, message} =
   useSelector((state) => state.question)
@@ -39,15 +43,35 @@ const TestPage = () => {
     dispatch(reset())
   }, [questions, isFetch, isError, isLoading, isSuccess, dispatch, params, navigate])
 
-  const handleAnswers = (questionIndex, answerIndex) => {
+  const handleAnswers = (questionIndex, answer) => {
     setSelectedAnswers((prevState) => ({
       ...prevState,
-      [questionIndex]: answerIndex
+      [questionIndex]: answer._id
     }))
   }
 
   const handleTest = () => {
-    
+    setScores(questions.map((question, questionIndex) => {
+      let choice = null;
+      question.answers.forEach(answer => {
+        console.log(answer._id, selectedAnswers[questionIndex])
+        if (answer._id === selectedAnswers[questionIndex]) {
+          if (answer.isCorrect) {
+            setTotalScore((prevState) => prevState + 1);
+            choice = true;
+          } else {
+            choice = false;
+          }
+        }
+
+        if (answer.isCorrect) {
+          setRightAnswers((prevState) => [...prevState, answer.answerBody])
+        }
+      });
+      return choice;
+    }))
+    console.log(rightAnswers)
+    setIsTestOver(true);
   }
 
   return <>
@@ -56,25 +80,27 @@ const TestPage = () => {
             <li key={questionIndex}>
                 <h3>{question.title}</h3>
                 <form>
-                  {question.answers.map((answer, answerIndex) => (
-                    <div key={answerIndex}>
+                  {question.answers.map((answer) => (
+                    <div key={answer._id}>
                       <input 
                         type="radio"
-                        id={`q${questionIndex}-a${answerIndex}`}
+                        id={`q${questionIndex}-a${answer._id}`}
                         name={`question-${questionIndex}`}
-                        value={answerIndex}
-                        checked={selectedAnswers[questionIndex] === answerIndex}
-                        onChange={() => handleAnswers(questionIndex, answerIndex)}
+                        value={answer._id}
+                        checked={selectedAnswers[questionIndex] === answer._id}
+                        onChange={() => handleAnswers(questionIndex, answer)}
                       />
-                      <label htmlFor={`q${questionIndex}-a${answerIndex}`}>{answer.answerBody}</label>
+                      <label htmlFor={`q${questionIndex}-a${answer._id}`}>{answer.answerBody}</label>
                     </div>
                   ))}
                 </form>
                 <p><strong>Course: </strong>{question.course}</p>
                 <p><strong>Difficulty: </strong>{question.difficulty}</p>
+                {isTestOver ? <p><strong>Correct answer: </strong>{rightAnswers[questionIndex]}</p> : null}
             </li>
           )) : null} 
-          <button onClick={handleTest}>Finish Test</button>
+          {isTestOver ? (<p>Your Score: <strong>{totalScore}</strong>/{scores.length}</p>) 
+          : (<button onClick={handleTest}>Finish Test</button>)}
       </ul>
     </>
 }
