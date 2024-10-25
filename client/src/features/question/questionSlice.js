@@ -61,7 +61,6 @@ export const questionSlice = createSlice({
             state.isLoading = false;
             state.isSuccess = true;
             state.questions = action.payload;
-            console.log(state.questions);
         })
         .addCase(getQuestions.rejected, (state, action) => {
             state.isLoading = false;

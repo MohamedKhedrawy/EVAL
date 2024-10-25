@@ -26,6 +26,7 @@ import { useNavigate } from "react-router-dom";
     const onSubmit = (e) => {
       e.preventDefault();
       dispatch(setParams(formData))
+      
       navigate('/test')
     }
 
@@ -50,6 +51,8 @@ import { useNavigate } from "react-router-dom";
           <input type="radio" value={'3'} name="difficulty" onChange={onChange}/> Hard
 
           <input name="noOfQ" type="number" min={1} max={100} placeholder="Number of Questions" value={formData.noOfQ} onChange={onChange}/>
+
+          <button type="submit">Start the Test</button>
       </form>
     </>
  }
