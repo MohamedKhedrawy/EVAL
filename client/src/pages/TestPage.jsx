@@ -20,6 +20,7 @@ const TestPage = () => {
 
   useEffect(() => {
     dispatch(getQuestions(params))
+    setParams({});
   }, [params, dispatch])
 
   useEffect(() => {
@@ -36,7 +37,7 @@ const TestPage = () => {
       setIsFetch(true);
     }
 
-    if(!questions || questions.length < 1) {
+    if(Object.keys(params).length === 0) {
       navigate('/dashboard')
     }
 
