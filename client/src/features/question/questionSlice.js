@@ -43,9 +43,9 @@ export const toggleIsMistake = createAsyncThunk('question/ToggleIsMistake', asyn
     }
 })
 
-export const postQuestions = createAsyncThunk('question/postQuestions', async(questionData, thunkAPI) => {
+export const postQuestion = createAsyncThunk('question/postQuestions', async(questionData, thunkAPI) => {
     try {
-        return await questionService.postQuestion();
+        return await questionService.postQuestion(questionData);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
@@ -71,15 +71,6 @@ export const questionSlice = createSlice({
         setQuestions: (state, action) => {
             state.questions = action.payload;
         },
-        // toggleMistake: (state, action) => {
-        //     const index = action.payload;
-        //     state.questions.forEach((question, questionIndex) => {
-        //         if (index === questionIndex) {
-        //             question.isMistake = true;
-        //             console.log(question.isMistake)
-        //         }
-        //     })
-        // }
     },
     extraReducers: (builder) => {
         builder
@@ -109,17 +100,19 @@ export const questionSlice = createSlice({
             state.isError = true;
             state.message = action.payload;
         })
-        .addCase(postQuestions.pending, (state) => {
+        .addCase(postQuestion.pending, (state) => {
             state.isLoading = true;
         })
-        .addCase(postQuestions.fulfilled, (state) => {
+        .addCase(postQuestion.fulfilled, (state) => {
             state.isLoading = false;
             state.isSuccess = true;
+            console.log('question posted');
         })
-        .addCase(postQuestions.rejected, (state, action) => {
+        .addCase(postQuestion.rejected, (state, action) => {
             state.isLoading = false;
             state.isError = true;
             state.message = action.payload;
+            console.log('question rejected');
         })
     }
 })

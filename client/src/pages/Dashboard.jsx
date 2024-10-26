@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import {setParams} from '../features/question/questionSlice.js'
+import {setParams, postQuestion} from '../features/question/questionSlice.js'
 import { useNavigate } from "react-router-dom";
 
  
@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
     const [postQuestions, setPostQuestions] = useState({
       title: '',
       course: '',
-      diificulty: 0
+      difficulty: 0
     })
     const [postAnswers, setPostAnswers] = useState(
       [{
@@ -64,6 +64,17 @@ import { useNavigate } from "react-router-dom";
       setAnswerFields((prevState) => prevState + 1)
     }
 
+    const handlePost = (e) => {
+      e.preventDefault();
+      const questionData = {title: postQuestions.title,
+        answers: postAnswers,
+        course: postQuestions.course,
+        difficulty: postQuestions.difficulty
+      }
+      console.log(questionData);
+      dispatch(postQuestion(questionData));
+    }
+
     const onSubmit = (e) => {
       e.preventDefault();
       dispatch(setParams(formData))
@@ -101,7 +112,7 @@ import { useNavigate } from "react-router-dom";
           <button type="submit">Start the Test</button>
       </form>
 
-      <form>
+      <form onSubmit={handlePost}>
           <h2>Post New Question</h2>
 
           <label>Question: </label>

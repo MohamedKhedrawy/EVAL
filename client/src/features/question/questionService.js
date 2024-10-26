@@ -48,11 +48,12 @@ const toggleIsMistake = asyncHandler(async(questionId) => {
 const postQuestion = asyncHandler(async(questionData) => {
     try {
         const token = localStorage.getItem('userToken')
-        return await axios.post('http://localhost:5000/api/questions', questionData, {
+        const response = await axios.post('http://localhost:5000/api/questions', questionData, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         });
+        return response.data;
     } catch (error) {
         console.error(error);
     }

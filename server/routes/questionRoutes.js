@@ -19,7 +19,7 @@ router.post('/', [
     .withMessage('Answers must be an array with at least 2 answers.')
     .custom(answers => {
         for (let answer of answers) {
-          if (!answer.answerText || typeof answer.answerText !== 'string') {
+          if (!answer.answerBody || typeof answer.answerBody !== 'string') {
             throw new Error('Each answer must have a valid answerText');
           }
           if (typeof answer.isCorrect !== 'boolean') {
@@ -29,11 +29,11 @@ router.post('/', [
         return true;
       }),
 
-      // body('course')
-      // .isString()
-      // .trim()
-      // .notEmpty()
-      // .withMessage('Enter the Course'),
+      body('course')
+      .isString()
+      .trim()
+      .notEmpty()
+      .withMessage('Enter the Course'),
 
     body('difficulty')
     .isInt({ min: 0, max: 3 })
