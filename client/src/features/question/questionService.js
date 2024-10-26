@@ -20,12 +20,15 @@ const getQuestions = asyncHandler(async(params) => {
 const getWrongQuestions = asyncHandler(async(course) => {
     try {
         const token = localStorage.getItem('userToken')
-        const wrongQuestions = await axios.get('http://localhost:5000/api/questions/wrong', {
-            headers: {
-                'Authorization': `Bearer ${token}` 
-            }
-        }, course);
-        return wrongQuestions;
+        if (true) {
+            const wrongQuestions = await axios.get('http://localhost:5000/api/questions', {
+                params: {course},
+                headers: {
+                    'Authorization': `Bearer ${token}` 
+                }
+            });
+            return wrongQuestions.data;
+        }       
     } catch (error) {
         console.error(error);
     }

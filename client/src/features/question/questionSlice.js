@@ -24,9 +24,10 @@ export const getQuestions = createAsyncThunk('question/getQuestions', async(_, t
     }
 })
 
-export const getWrongQuestions = createAsyncThunk('question/getWrongQuestions', async(_, thunkAPI) => {
+export const getWrongQuestions = createAsyncThunk('question/getWrongQuestions', async(course, thunkAPI) => {
     try {
-        return await questionService.getWrongQuestions();
+        const wrongQuestions = await questionService.getWrongQuestions(course);
+        return wrongQuestions
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
         return thunkAPI.rejectWithValue(message);
