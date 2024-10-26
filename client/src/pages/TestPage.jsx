@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getQuestions, reset, setParams, setQuestions } from "../features/question/questionSlice.js";
+import { getQuestions, reset, setParams, setQuestions, toggleIsMistake } from "../features/question/questionSlice.js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -61,6 +61,8 @@ const TestPage = () => {
             setTotalScore((prevState) => prevState + 1);
             choice = true;
           } else {
+            dispatch(toggleIsMistake(question._id));
+            console.log(question, question._id, question.isMistake);
             choice = false;
           }
         }

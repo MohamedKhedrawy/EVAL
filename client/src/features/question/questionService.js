@@ -9,7 +9,7 @@ const getQuestions = asyncHandler(async(params) => {
             params: {course, difficulty, noOfQ},
             headers: {
                 'Authorization': `Bearer ${token}`
-            },
+            }
         });
         return questions.data;
     } catch (error) {
@@ -19,10 +19,29 @@ const getQuestions = asyncHandler(async(params) => {
 
 const getWrongQuestions = asyncHandler(async(course) => {
     try {
-        const wrongQuestions = await axios.get('http://localhost:5000/api/questions/wrong', course);
+        const token = localStorage.getItem('userToken')
+        const wrongQuestions = await axios.get('http://localhost:5000/api/questions/wrong', {
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        }, course);
         return wrongQuestions;
     } catch (error) {
         console.error(error);
+    }
+})
+
+const toggleIsMistake = asyncHandler(async(questionId) => {
+    try {
+        const token = localStorage.getItem('userToken');
+        await axios.put('http://localhost:5000/api/questions', {questionId}, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        return
+    } catch (error) {
+        console.error(error)
     }
 })
 
@@ -40,6 +59,6 @@ const postQuestion = asyncHandler(async(questionData) => {
 })
 
 const questionService = {getQuestions, getWrongQuestions,
-    postQuestion
+    postQuestion, toggleIsMistake
 }
 export default questionService;

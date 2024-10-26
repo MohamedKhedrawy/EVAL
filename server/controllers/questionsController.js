@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Question from "../models/questionsModel.js";
 import { validationResult } from "express-validator";
 import RepeatedQuestion from '../models/shownQuestionsModel.js'
+import { toggleMistake } from "../../client/src/features/question/questionSlice.js";
 
 export const getQuestions = asyncHandler( async(req, res) => {
     let { course, difficulty: maxDiff, noOfQ} = req.query;
@@ -115,6 +116,26 @@ export const getWrongQuestions = asyncHandler(async(req, res) => {
     } catch (error) {
         res.status(400);
         throw new Error('Failed to get the wrong questions')
+    }
+})
+
+export const toggleIsMistake = asyncHandler(async(req, res) => {
+    try {
+        const questionId = req.body.questionId;
+        const wrongQuestion = await Question.findById(questionId);
+
+        if (!wrongQuestion) {
+            res.status(404);
+            throw new Error('Question Not Found');
+        }
+
+        wrongQuestion.isMistake = true;
+        await wrongQuestion.save();
+
+        res.status(200).json('Mistake registered')
+    } catch (error) {
+        res.status(400);
+        throw new Error('failed to register mistake')
     }
 })
 

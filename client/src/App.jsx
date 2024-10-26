@@ -5,6 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard'
 import LandingPage from './pages/LandingPage';
 import TestPage from './pages/TestPage';;
+import MistakesPage from './pages/MistakesPage';
 
 function App() {
   
@@ -16,6 +17,7 @@ const router = createBrowserRouter(
       <Route path='/register' element={<RegisterPage />} />
       <Route path='/dashboard' element={<Dashboard />} />
       <Route path='/test' element={<TestPage />} />
+      <Route path='/mistakes' element={<MistakesPage />} />
     </>
   )
 )
