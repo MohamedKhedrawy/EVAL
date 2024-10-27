@@ -51,14 +51,29 @@ import {login, reset} from '../features/auth/authSlice.js';
       dispatch(login(userData));
    }
 
-    return <div className="form-container">
-      <form className="auth-form" onSubmit={onSubmit}>
-         <input name="email" type="email" value={email} placeholder="Email" required onChange={onChange} />
-         <input name="password" type="password" value={password} placeholder="Password" required onChange={onChange} />
-         <button type="submit">Submit</button>
-         <Link to={'/register'}>Don't have an account yet?</Link>
-      </form>
-    </div>
+      return <div className="form-container">
+         <div className="login-box">
+            <div className="login-header">
+               <h2>Login</h2>
+            </div>
+            <form className="auth-form" onSubmit={onSubmit}>
+               <div className="input-box">
+                  <input className="email" name="email" type="email" value={email}  required onChange={onChange} />
+                  <label htmlFor="user" className="label">Email</label>
+               </div>
+               <div className="input-box">
+                  <input className="password" name="password" type="password" value={password}  required onChange={onChange} />
+                  <label htmlFor="pass" className="label">Password</label>
+               </div>
+               <div className="input-box">
+                  <button type="submit" className="input-submit">Login</button>
+               </div>
+               <div className="register">
+                  <p>Don't have an account? <Link to={'/register'} className="register-here">Register here</Link></p>
+               </div>
+            </form>
+         </div>
+         </div>
  }
 
  export default LoginPage;
