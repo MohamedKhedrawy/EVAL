@@ -1,0 +1,148 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family:Verdana, Geneva, Tahoma, sans-serif ;
+}
+body{
+    background-image: url('images/pexels-pixabay-220182.jpg');
+    background-size: cover; 
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.register-here{
+    text-decoration: none;
+    color: #fff;
+}
+.register-here:hover{
+    text-decoration: underline;
+    color: #48437c;
+    transition: 0.5s;
+}
+
+.form-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.2)
+}
+
+.login-box{
+    position: relative;
+    width: 450px;
+    backdrop-filter: blur(7px);
+    border: 2px solid rgb(168, 164, 164);
+    border-radius: 15px;
+    padding: 7.5em 2.5em 4em 2.5em;
+    color: whitesmoke;
+    box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.3);
+}
+
+.login-header{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color:  rgb(168, 164, 164);
+    width: 140px;
+    height: 70px;
+    border-radius: 0 0 20px 20px;
+}
+
+.login-header h2{
+    font-size: 30px;
+    color: black;
+}
+
+.login-header::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -30px;
+    width: 30px;
+    height: 30px;
+    background:transparent;
+    box-shadow: 15px 0 0 0 0 rgb(32, 31, 31);
+    border-top-right-radius:50%;
+}
+.login-header::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -30px;
+    width: 30px;
+    height: 30px;
+    background:transparent;
+    box-shadow: -15px 0 0 0 0 rgb(32, 31, 31);
+    border-top-left-radius:50%;
+}
+.input-box{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+}
+.email , .password{
+    width: 100%;
+    height: 55px;
+    font-size: 16px;
+    background: transparent;
+    padding-inline: 20px 50px;
+    color: white;
+    border: 2px solid rgb(168, 164, 164);
+    border-radius: 30px;
+    outline: none;
+}
+.label{
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    transition: .2s;
+}
+.email:focus ~ .label,
+.email:valid ~ .label{
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 14px;
+    background-color: rgb(127, 147, 135) ;
+    border-radius: 30px;
+    color: black;
+    padding: 0 10px;
+}
+.password:focus ~ .label,
+.password:valid ~ .label{
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 14px;
+    background-color: rgb(127, 147, 135) ;
+    border-radius: 30px;
+    color: black;
+    padding: 0 10px;
+}
+.input-submit{
+    width: 100%;
+    height: 50px;
+    background: whitesmoke;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.input-submit:hover{
+    background: rgb(127, 147, 135);
+    color: white;
+}
+.register{
+    text-align: center;
+}
