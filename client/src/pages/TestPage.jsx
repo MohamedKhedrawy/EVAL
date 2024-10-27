@@ -77,6 +77,10 @@ const TestPage = () => {
     setIsTestOver(true);
   }
 
+  const handleDashboardNav = () => {
+    navigate('/dashboard')
+  }
+
   return <>
       <ul>
           {(isFetch && questions.length > 0) ? questions.map((question, questionIndex) => (
@@ -102,7 +106,12 @@ const TestPage = () => {
                 {isTestOver ? <p><strong>Correct answer: </strong>{rightAnswers[questionIndex]}</p> : null}
             </li>
           )) : null} 
-          {isTestOver ? (<p>Your Score: <strong>{totalScore}</strong>/{scores.length}</p>) 
+          {isTestOver ? ( <>
+            <p>Your Score: <strong>{totalScore}</strong>/{scores.length}</p>
+            <button onClick={handleDashboardNav}>End Test</button>
+          </>
+          )
+          
           : (<button onClick={handleTest}>Finish Test</button>)}
       </ul>
     </>
