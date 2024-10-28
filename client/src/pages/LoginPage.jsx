@@ -13,6 +13,8 @@ import {login, reset} from '../features/auth/authSlice.js';
    const {isError, isSuccess, isLoading, message, isAuthed} =
    useSelector((state) => state.auth)
 
+   const token = localStorage.getItem('userToken')
+
    useEffect(() => {
       if (isLoading) {
          //add spinner
@@ -23,7 +25,7 @@ import {login, reset} from '../features/auth/authSlice.js';
          console.log(message);
       }
 
-      if (isSuccess) {
+      if (token) {
          navigate('/dashboard');
       }
       

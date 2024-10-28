@@ -2,7 +2,6 @@ import asyncHandler from "express-async-handler";
 import Question from "../models/questionsModel.js";
 import { validationResult } from "express-validator";
 import RepeatedQuestion from '../models/shownQuestionsModel.js'
-import { toggleMistake } from "../../client/src/features/question/questionSlice.js";
 
 export const getQuestions = asyncHandler( async(req, res) => {
     let { course, difficulty: maxDiff, noOfQ} = req.query;

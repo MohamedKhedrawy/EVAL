@@ -77,7 +77,6 @@ export const getMyInfo = asyncHandler(async (req, res) => {
     res.status(200).json({
         _id: _id,
         name,
-        email,
-        token
+        email
     })
 })

@@ -13,24 +13,22 @@ const getQuestions = asyncHandler(async(params) => {
         });
         return questions.data;
     } catch (error) {
-        console.error(error);
+        throw error.response?.data?.message || 'Question Fetching Failed';
     }
 }) 
 
 const getWrongQuestions = asyncHandler(async(course) => {
     try {
         const token = localStorage.getItem('userToken')
-        if (true) {
-            const wrongQuestions = await axios.get('http://localhost:5000/api/questions', {
-                params: {course},
-                headers: {
-                    'Authorization': `Bearer ${token}` 
-                }
-            });
-            return wrongQuestions.data;
-        }       
+        const wrongQuestions = await axios.get('http://localhost:5000/api/questions', {
+            params: {course},
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+        return wrongQuestions.data; 
     } catch (error) {
-        console.error(error);
+        throw error.response?.data?.message || 'Mistakes Fetching Failed'
     }
 })
 
@@ -44,7 +42,7 @@ const toggleIsMistake = asyncHandler(async(questionId) => {
         })
         return
     } catch (error) {
-        console.error(error)
+        throw error.response?.data?.message || 'Mistake Register failed'
     }
 })
 
@@ -58,11 +56,26 @@ const postQuestion = asyncHandler(async(questionData) => {
         });
         return response.data;
     } catch (error) {
-        console.error(error);
+        throw error.response?.data?.message || 'Question Posting Failed'
+    }
+})
+
+const clearRepeated = asyncHandler(async() => {
+    try {
+        const token = localStorage.getItem('userToken');
+        console.log(token)
+        const response = await axios.post('http://localhost:5000/api/questions/clear', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        return response.data
+    } catch (error) {
+        throw error.response?.data?.message || 'Repeated Questions Clearing Failed';
     }
 })
 
 const questionService = {getQuestions, getWrongQuestions,
-    postQuestion, toggleIsMistake
+    postQuestion, toggleIsMistake, clearRepeated
 }
 export default questionService;

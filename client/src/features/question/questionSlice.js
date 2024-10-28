@@ -20,7 +20,8 @@ export const getQuestions = createAsyncThunk('question/getQuestions', async(_, t
         return await questionService.getQuestions(params);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-        return thunkAPI.rejectWithValue(message);
+        console.log(message)
+        return thunkAPI.rejectWithValue(error);
     }
 })
 
@@ -30,7 +31,8 @@ export const getWrongQuestions = createAsyncThunk('question/getWrongQuestions', 
         return wrongQuestions
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-        return thunkAPI.rejectWithValue(message);
+        console.log(message)
+        return thunkAPI.rejectWithValue(error);
     }
 })
 
@@ -40,7 +42,8 @@ export const toggleIsMistake = createAsyncThunk('question/ToggleIsMistake', asyn
         return 
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-        return thunkAPI.rejectWithValue(message);
+        console.log(message)
+        return thunkAPI.rejectWithValue(error);
     }
 })
 
@@ -49,7 +52,18 @@ export const postQuestion = createAsyncThunk('question/postQuestions', async(que
         return await questionService.postQuestion(questionData);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-        return thunkAPI.rejectWithValue(message);
+        console.log(message)
+        return thunkAPI.rejectWithValue(error);
+    }
+})
+
+export const clearRepeated = createAsyncThunk('question/clearRepeated', async(_, thunkAPI) => {
+    try {
+        return await questionService.clearRepeated();
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        console.log(message)
+        return thunkAPI.rejectWithValue(error);
     }
 })
 
@@ -114,6 +128,20 @@ export const questionSlice = createSlice({
             state.isError = true;
             state.message = action.payload;
             console.log('question rejected');
+        })
+        .addCase(clearRepeated.pending, (state) => {
+            state.isLoading = true;
+        })
+        .addCase(clearRepeated.fulfilled, (state) => {
+            state.isLoading = false;
+            state.isSuccess = true;
+            console.log('Repeated Questions Cleared');
+        })
+        .addCase(clearRepeated.rejected, (state, action) => {
+            state.isLoading = false;
+            state.isError = true;
+            state.message = action.payload;
+            console.log('Clearing Failed');
         })
     }
 })

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { postQuestion } from "../features/question/questionSlice";
 
 const QuestionPost = () => {
 
