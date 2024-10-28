@@ -85,8 +85,20 @@ export const getQuestions = asyncHandler( async(req, res) => {
             })
         }
 
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+              // Pick a random index from 0 to i
+              const j = Math.floor(Math.random() * (i + 1));
+          
+              // Swap elements at i and j
+              [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+          }
+
         if ((test) && (test.length > 0)) {
-            res.status(200).json(test);
+            const shuffledTest = shuffleArray(test);
+            res.status(200).json(shuffledTest);
         } else {
             res.status(404);
             throw new Error('No questions found');
