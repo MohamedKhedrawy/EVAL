@@ -25,6 +25,6 @@ router.post('/register', [
 
 router.post('/login', loginUser);
 // router.post('/logout', logoutUser);
-router.post('/myinfo', protectRoute, getMyInfo);
+router.get('/myinfo', protectRoute, getMyInfo);
 
 export default router
