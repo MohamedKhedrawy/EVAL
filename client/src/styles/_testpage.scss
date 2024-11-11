@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+
+.test-page-container {
+   overflow-y: auto;
+   overflow-x: hidden;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   height: 100%;
+   width: 100%;
+   padding-bottom: 50px;
+   background-color: #000; // Full black background
+   color: #00FF99;
+   font-family: 'Press Start 2P', monospace;
+
+   p {
+      // margin-top: 10px;
+      font-family: "Roboto", monospace;
+      margin-bottom: 5px;
+   }
+
+   strong {
+      font-family: "ocra", monospace;
+   }
+}
+
+.test-window {
+   // background: #001a00; // Dark green for the terminal effect
+   background-color: #000;
+   border: 3px solid #00FF99;
+   border-radius: 10px;
+   padding: 30px;
+   width: 90%;
+   height: 90%;
+   // max-width: 600px;
+   box-shadow: 0 0 30px rgba(0, 255, 153, 0.8);
+   text-align: center;
+   position: relative;
+   display: flex;
+   flex-direction: column;
+   
+}
+
+.question-text {
+   font-size: 1rem;
+   margin-bottom: 20px;
+   margin-top: 20px;
+   text-shadow: 0 0 8px #00FF99;
+   animation: blink 15s steps(2, start) infinite;
+   // font-family: "ocra", monospace;
+   font-family: "Press Start 2P", system-ui;
+   font-weight: lighter;
+
+
+   @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+   }
+}
+
+.answer-options {
+   display: flex;
+   flex-direction: column;
+   gap: 15px;
+   margin-bottom: 10px;
+   span {
+   font-family: "ocra", monospace;
+   // font-family: "Roboto", monospace;
+
+   }
+
+   label {
+      margin-left: 10px;
+   }
+}
+
+.answer-option {
+   padding: 10px;
+   background: #002200;
+   border: 2px solid #00FF99;
+   color: #00FF99;
+   border-radius: 6px;
+   cursor: pointer;
+   font-size: 1.1rem;
+   transition: background 0.3s ease, transform 0.1s ease;
+   box-shadow: inset 0 0 8px rgba(0, 255, 153, 0.3);
+
+   &:hover {
+      background: #003300;
+      transform: scale(1.02);
+      box-shadow: 0 0 15px rgba(0, 255, 153, 0.7);
+   }
+   
+   &:active {
+      background: #001100;
+      transform: scale(0.98);
+
+   }
+
+   &.checked {
+      background-color: red;
+   }
+}
+
+input[type="radio"] {
+   &.test {
+      // display: none; // Hide the actual radio button
+      position: relative;
+      top: 3px;
+      right: 8px;
+   }
+
+    // When an option is selected, apply a highlight
+   &:hover {
+      background-color: rgba(0, 255, 153, 0.2); // Light green highlight
+
+   }
+   &:active {
+      background-color: #00FF99; // Solid green when selected
+      color: #000; // Black text
+      transform: scale(1.02);
+   }
+ }
+
+
+
+//  input[type="radio"]:checked + & {
+//  // Slight scale effect to show it's active
+//  }
+
+.end-test-button {
+   position: fixed;
+   // margin-top: 30px;
+   padding: 10px 40px;
+   background: #000;
+   color: #00FF99;
+   border: 2px solid #00FF99;
+   border-radius: 6px;
+   font-size: 1.2rem;
+   cursor: pointer;
+   text-shadow: 0 0 5px #00FF99;
+   transition: background 0.3s ease, box-shadow 0.3s ease;
+   box-shadow: 0 0 10px rgba(0, 255, 153, 0.6);
+   width: 90%;
+   bottom: 0;
+   left: 5%;
+
+   &:hover {
+      background: #002200;
+      box-shadow: 0 0 20px #00FF99;
+   }
+
+   &:active {
+      background: #003300;
+   }
+}
+
+ol {
+   margin-left: 50px;
+}

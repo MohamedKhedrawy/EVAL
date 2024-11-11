@@ -1,0 +1,109 @@
+.input-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    font-family: 'Press Start 2P', monospace;
+  
+    label {
+      color: #00ff00; // Bright green for labels to match the Matrix theme
+    }
+  
+    input {
+      border: 2px solid #00ff00;
+      background-color: #111;
+      color: #00ff00;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+      margin-bottom: 8px;
+      
+      &:focus {
+        box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+      }
+  
+      &.error {
+        border-color: #ff3333;
+        box-shadow: 0 0 6px rgba(255, 51, 51, 0.7); // Red glow for errors
+      }
+    }
+  
+    .error-message {
+      color: #ff3333; // Bright red for error text
+      font-size: 0.75rem;
+      margin-top: 4px;
+      padding-left: 4px;
+      display: none; // Hidden by default
+  
+      &.visible {
+        display: block; // Show only when there's an error
+        animation: blinkRed 1s infinite alternate; // Subtle blink for retro effect
+      }
+    }
+  }
+  
+  // Optional blink animation for the error message
+  @keyframes blinkRed {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0.7;
+    }
+  }
+
+  ///////////////pop up prompts
+  .error-prompt {
+  background-color: #330000; // Dark red background for contrast
+  border: 2px solid #ff3333; // Bright red border for error indication
+  color: #ff3333; // Matching red text color
+  padding: 15px;
+  width: 90%;
+  max-width: 600px;
+  margin: 20px auto;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.85rem;
+  text-align: center;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(255, 51, 51, 0.7); // Red glow to enhance visibility
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out;
+  justify-self: center;
+  align-self: center;
+  position: relative;
+  top: 80px;
+
+  p {
+    margin: 0;
+    margin-bottom: 10px;
+  }
+
+  // Optional close button to allow users to dismiss the error
+  .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    cursor: pointer;
+    color: #ff3333;
+    font-size: 1.2rem;
+    transition: color 0.2s;
+    width: 100px;
+    height: 100px;
+
+    &:hover {
+      color: #ff6666; // Slightly lighter red on hover
+    }
+  }
+
+  // Keyframe animation for a fade-in effect
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

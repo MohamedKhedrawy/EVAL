@@ -26,8 +26,22 @@ const logout = () => {
     localStorage.removeItem('userToken')
 }
 
+const getMyInfo = asyncHandler(async() => {
+    try {
+        const token = localStorage.getItem('userToken')
+        const user = await axios.get('http://localhost:5000/api/users/myinfo', {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        return user.data
+    } catch (error) {
+        throw error.response?.data?.message || 'fetching info failed';
+    }
+})
+
 const authService = {
-    register, login, logout
+    register, login, logout, getMyInfo
 }
 
 export default authService

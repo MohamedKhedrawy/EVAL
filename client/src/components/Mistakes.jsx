@@ -1,54 +1,68 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { getWrongQuestions } from "../features/question/questionSlice.js";
+import { useNavigate } from "react-router-dom";
 
 const Mistakes = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch();
+  const { wrongQuestions } = useSelector((state) => state.question);
+  const [wrongQuestionCourse, setWrongQuestionCourse] = useState("");
+  const [isCourseSelected, setIsCourseSelected] = useState(false);
 
-    const {wrongQuestions} = useSelector((state) => state.question)
-    const [wrongQuestionCourse, setWrongQuestionCourse] = useState('');
+  useEffect(() => {
+    dispatch(getWrongQuestions(wrongQuestionCourse));
+  }, [dispatch, wrongQuestionCourse]);
 
-    useEffect(() => {
-        dispatch(getWrongQuestions(wrongQuestionCourse))
-      }, [dispatch, wrongQuestionCourse])
+  useEffect(() => {
+    if (wrongQuestionCourse !== "") {
+      setIsCourseSelected(true);
+    }
+  }, [wrongQuestionCourse])
 
-      const handleWrongQuestionCourse = (e) => {
-        setWrongQuestionCourse(e.target.value)
-      }
+  const handleWrongQuestionCourse = (e) => {
+    setWrongQuestionCourse(e.target.value);
+  };
 
-    return <>
+  const handleMistakes = () => {
+    navigate('/mistakes');
+  }
+
+  return (
+    <>
+      <div className="question-form">
         <h2>See Your Mistakes</h2>
-      <select name="course" value={wrongQuestionCourse} onChange={handleWrongQuestionCourse}>
-          <option value={''}>Select a Course</option>
-          <option value={'geo'}>Geo</option>
-          <option value={'OOP'}>OOP</option>
-          <option value={'Data Communication'}>Data Communication</option>
-          <option value={'Information Systems'}>Information Systems</option>
-          <option value={'Discrete Maths'}>Discrete Maths</option>
-          <option value={'Project Management'}>Project Management</option>
-          <option value={'Business Management'}>Business Management</option>
-          <option value={'Technical Writing'}>Technical Writing</option>
-          <option value={'Probability & Statistics'}>Probability & Statistics</option>
-          <option value={'Signals'}>Signals</option>
-        </select>
-      <ul>
-        {wrongQuestions ? wrongQuestions.map(
-          (wrongQuestion, wrongQuestionIndex) => (
-            <li key={wrongQuestionIndex}>
-              <div>
-                <h3>{wrongQuestion.title}</h3>
-                <p><strong>Difficulty: </strong>{wrongQuestion.difficulty}</p>
-                <p><strong>Correct answer: </strong>
-                {wrongQuestion.answers.filter(answer => answer.isCorrect)
-                .map(answer => answer.answerBody)}</p>
-              </div>
-            </li>
-          )
-        ) : null}
-
-      </ul>
+        <div className="parameter">
+          <select
+            name="course"
+            className="dropdown"
+            value={wrongQuestionCourse}
+            onChange={handleWrongQuestionCourse}
+          >
+            <option value={""}>Select a Course</option>
+            <option value={"geo"}>Geo</option>
+            <option value={"OOP"}>OOP</option>
+            <option value={"Data Communication"}>Data Communication</option>
+            <option value={"Information Systems"}>Information Systems</option>
+            <option value={"Discrete Maths"}>Discrete Maths</option>
+            <option value={"Project Management"}>Project Management</option>
+            <option value={"Business Management"}>Business Management</option>
+            <option value={"Technical Writing"}>Technical Writing</option>
+            <option value={"Probability & Statistics"}>
+              Probability & Statistics
+            </option>
+            <option value={"Signals"}>Signals</option>
+          </select>
+        </div>
+      </div>
+      {isCourseSelected ? (
+        <button className="button mistakes" onClick={handleMistakes}>
+          View mistakes
+        </button>
+      ) : null}
     </>
-} 
+  );
+};
 
 export default Mistakes;

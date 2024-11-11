@@ -1,81 +1,143 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {login, reset} from '../features/auth/authSlice.js';
+import { login, reset } from "../features/auth/authSlice.js";
+import Spinner from "../components/Spinner.jsx";
 
- 
+const LoginPage = () => {
+  const typingTextRef = useRef(null);
+  const intervalRef = useRef(null);
 
- const LoginPage = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-   const dispatch = useDispatch();
-   const navigate = useNavigate();
+  const { isError, isSuccess, isLoading, message, isAuthed } = useSelector(
+    (state) => state.auth
+  );
 
-   const {isError, isSuccess, isLoading, message, isAuthed} =
-   useSelector((state) => state.auth)
+  const token = localStorage.getItem("userToken");
 
-   const token = localStorage.getItem('userToken')
+  const [isSpinner, setIsSpinner] = useState(false);
 
-   useEffect(() => {
-      if (isLoading) {
-         //add spinner
-      }
+  useEffect(() => {
+    const text = "Enter your email and password";
+    const typingSpeed = 50;
+    const startingDelay = 500;
+    let index = 0;
 
-      if (isError) {
-         //add error prompt and remove console.log
-         console.log(message);
-      }
+    const typingTimeout = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        typingTextRef.current.style.fontFamily = '"Press Start 2P", system-ui';
+        if (index < text.length) {
+          typingTextRef.current.innerHTML = text.slice(0, index + 1);
+          index++;
+        } else {
+          typingTextRef.current.innerHTML = text;
+          clearInterval(intervalRef.current);
+        }
+      }, typingSpeed);
+    }, startingDelay);
 
-      if (token) {
-         navigate('/dashboard');
-      }
-      
-      dispatch(reset());
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(typingTimeout);
+    };
+  }, []);
 
-   }, [isLoading, isError, isSuccess, message, dispatch, navigate])
+  useEffect(() => {
+    if (isLoading) {
+      setIsSpinner(true);
+    } else {
+      setIsSpinner(false);
+    }
 
-   const [formData, setFormData] = useState({
-      email: '',
-      password: ''
-   })
+    if (isError) {
+      //add error prompt and remove console.log
+      console.log(message);
+    }
 
-   const {email, password} = formData;
+    if (token) {
+      navigate("/dashboard");
+    }
 
-   const onChange = (e) => {
-      setFormData((prevState) => ({
-         ...prevState,
-         [e.target.name]: e.target.value
-      }))
-   }
+    dispatch(reset());
+  }, [isLoading, isError, isSuccess, message, dispatch, navigate]);
 
-   const onSubmit = (e) => {
-      e.preventDefault();
-      const userData = {email, password};
-      dispatch(login(userData));
-   }
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-      return <div className="form-container">
-         <div className="login-box">
-            <div className="login-header">
-               <h2>Login</h2>
+  const { email, password } = formData;
+
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const userData = { email, password };
+    dispatch(login(userData));
+  };
+
+  return (
+    <>
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <div className="homepage">
+          <h1 className="title login">EVAL</h1>
+          <h3 className="welcome login" ref={typingTextRef}></h3>
+
+          <div className="feature-section login">
+            <div className="parameter login">
+              <form className="question-form login" onSubmit={onSubmit}>
+                <div className="input-container">
+                <label htmlFor="email" id="email">
+                  Email
+                </label>
+                  <input
+                    className="input login"
+                    name="email"
+                    type="email"
+                    value={email}
+                    required
+                    onChange={onChange}
+                    placeholder="Email"
+                  />
+                  <label htmlFor="password" className="">
+                    Password
+                  </label>
+                  <input
+                    className="input login"
+                    name="password"
+                    type="password"
+                    value={password}
+                    required
+                    onChange={onChange}
+                    placeholder="Password"
+                  />
+                </div>
+
+                <button type="submit" className="button login">
+                  Login
+                </button>
+                <p className="redirect">
+                  Don't have an account?{" "}
+                  <Link to={"/register"} className="register-here">
+                    Register here
+                  </Link>
+                </p>
+              </form>
             </div>
-            <form className="auth-form" onSubmit={onSubmit}>
-               <div className="input-box">
-                  <input className="email" name="email" type="email" value={email}  required onChange={onChange} />
-                  <label htmlFor="user" className="label">Email</label>
-               </div>
-               <div className="input-box">
-                  <input className="password" name="password" type="password" value={password}  required onChange={onChange} />
-                  <label htmlFor="pass" className="label">Password</label>
-               </div>
-               <div className="input-box">
-                  <button type="submit" className="input-submit">Login</button>
-               </div>
-               <div className="register">
-                  <p>Don't have an account? <Link to={'/register'} className="register-here">Register here</Link></p>
-               </div>
-            </form>
-         </div>
-         </div>
- }
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
 
- export default LoginPage;
+export default LoginPage;

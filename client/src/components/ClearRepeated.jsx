@@ -10,10 +10,10 @@ const ClearRepeated = () => {
         dispatch(clearRepeated())
     }
 
-    return <>
+    return <div className="question-form">
         <h2>Clear Repeated Questions</h2>
-        <button onClick={handleClearRepeated}>Clear Repeated Questions</button>
-    </>
+        <button onClick={handleClearRepeated} className="button long">Clear Repeated Questions</button>
+    </div>
 }
 
 export default ClearRepeated;

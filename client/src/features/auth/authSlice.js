@@ -4,9 +4,10 @@ import authService from "./authService.js";
 const initialState = {
     isError: false,
     isSuccess: false,
-    isLoading: false,
+    isLoading: true ,
     message: '',
     isAuthed: false,
+    userName: ''
 }
 
 export const register = createAsyncThunk('auth/register', async(user, thunkAPI) => {
@@ -22,12 +23,22 @@ export const login = createAsyncThunk('auth/login', async(user, thunkAPI) => {
         return await authService.login(user);
     } catch (error) {
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-        return thunkAPI.rejectWithValue(error);
+        return thunkAPI.rejectWithValue(message);
     }
 })
 
 export const logout = createAsyncThunk('auth/logout', async() => {
     return await authService.logout();
+})
+
+export const getMyInfo = createAsyncThunk('auth/getinfo', async(_, thunkAPI) => {
+    try {
+        const user = await authService.getMyInfo();
+        return user;
+    } catch (error) {
+        const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
+        return thunkAPI.rejectWithValue(message);
+    }
 })
 
 export const authSlice = createSlice({
@@ -67,10 +78,18 @@ export const authSlice = createSlice({
             state.message = action.payload;
         })  
         .addCase(logout.fulfilled, (state, action) => {
-            state.user = null;
             state.isSuccess = true;
             // state.isAuthed = false;
             console.log('Logged out successfully')
+        })
+        .addCase(getMyInfo.fulfilled, (state, action) => {
+            state.userName = action.payload.name
+        })
+        .addCase(getMyInfo.rejected, (state, action) => {
+            state.message = action.payload
+        })
+        .addCase(getMyInfo.pending, (state, action) => {
+            state.isLoading = true;
         })
     }
 })

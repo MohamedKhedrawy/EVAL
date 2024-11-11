@@ -32,30 +32,35 @@ const TestParams = () => {
     return <>
         <form className="question-form" onSubmit={onSubmit}>
           <h2>Choose Test Parameters</h2>
-          <label>Course: </label>
-          <select name="course" value={formData.course} onChange={handleQuestionParams}>
-              <option value={''}>Select a Course</option>
-              <option value={'geo'}>Geo</option>
-              <option value={'OOP'}>OOP</option>
-              <option value={'Data Communication'}>Data Communication</option>
-              <option value={'Information Systems'}>Information Systems</option>
-              <option value={'Discrete Maths'}>Discrete Maths</option>
-              <option value={'Project Management'}>Project Management</option>
-              <option value={'Business Management'}>Business Management</option>
-              <option value={'Technical Writing'}>Technical Writing</option>
-              <option value={'Probability & Statistics'}>Probability & Statistics</option>
-              <option value={'Signals'}>Signals</option>
-          </select>
+          <div className="parameter">
+            <label>Course: </label>
+            <select name="course" className="dropdown" value={formData.course} onChange={handleQuestionParams}>
+                <option value={''}>Select a Course</option>
+                <option value={'geo'}>Geo</option>
+                <option value={'OOP'}>OOP</option>
+                <option value={'Data Communication'}>Data Communication</option>
+                <option value={'Information Systems'}>Information Systems</option>
+                <option value={'Discrete Maths'}>Discrete Maths</option>
+                <option value={'Project Management'}>Project Management</option>
+                <option value={'Business Management'}>Business Management</option>
+                <option value={'Technical Writing'}>Technical Writing</option>
+                <option value={'Probability & Statistics'}>Probability & Statistics</option>
+                <option value={'Signals'}>Signals</option>
+            </select>
+          </div>
 
-          <label>Diffficulty: </label>
-          <input type="radio" value={'1'} name="difficulty" onChange={handleQuestionParams}/> Easy
-          <input type="radio" value={'2'} name="difficulty" onChange={handleQuestionParams}/> Intermediate
-          <input type="radio" value={'3'} name="difficulty" onChange={handleQuestionParams}/> Hard
+          <div className="parameter radio-group"><label>Diffficulty: </label>
+            <input type="radio" className="" value={'1'} name="difficulty" onChange={handleQuestionParams}/> Easy
+            <input type="radio" className="" value={'2'} name="difficulty" onChange={handleQuestionParams}/> Intermediate
+            <input type="radio" className="" value={'3'} name="difficulty" onChange={handleQuestionParams}/> Hard
+          </div>
 
-          <label>Number of Questions</label>
-          <input name="noOfQ" type="number" min={1} max={100} placeholder="Number of Questions" value={formData.noOfQ} onChange={handleQuestionParams}/>
+          <div className="parameter">
+          <label>Number of Questions: </label>
+            <input name="noOfQ" className="input" type="number" min={1} max={100} placeholder="Number of Questions" value={formData.noOfQ} onChange={handleQuestionParams}/>
+          </div>
 
-          <button type="submit">Start the Test</button>
+          <button type="submit" className="button">Start the Test</button>
       </form>
     </>
 }
