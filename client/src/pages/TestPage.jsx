@@ -17,6 +17,11 @@ const TestPage = () => {
   const [isTestOver, setIsTestOver] = useState(false);
   const [scores, setScores] = useState([]);
   const [rightAnswers, setRightAnswers] = useState([]);
+  const [isQuestionWrong, setIsQuestionWrong] = useState([false]);
+
+  const [isSpinner, setIsSpinner] = useState(true);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const { params, questions, isError, isSuccess, isLoading, message } =
     useSelector((state) => state.question);
@@ -27,14 +32,21 @@ const TestPage = () => {
   useEffect(() => {
     dispatch(getQuestions(params));
     setParams({});
+    setIsSpinner(true);
   }, [params, dispatch]);
 
   useEffect(() => {
     if (isLoading) {
-      return <Spinner />
+      setIsSpinner(true);
+    } else {
+      setTimeout(() => {
+        setIsSpinner(false);
+      }, 1000);
     }
 
     if (isError) {
+      setError(true);
+      setErrorMsg(message)
     }
 
     if (isSuccess) {
@@ -46,7 +58,7 @@ const TestPage = () => {
     }
 
     dispatch(reset());
-  }, [isError, isLoading, isSuccess, dispatch, params, navigate]);
+  }, [isError, isLoading, isSuccess, message, dispatch, params, navigate]);
 
   const handleAnswers = (questionIndex, answer) => {
     setSelectedAnswers((prevState) => ({
@@ -65,10 +77,18 @@ const TestPage = () => {
             if (answer.isCorrect) {
               setTotalScore((prevState) => prevState + 1);
               choice = true;
+              setIsQuestionWrong((prevState) => ({
+                ...prevState, 
+                [questionIndex] : false
+              }));
             } else {
               dispatch(toggleIsMistake(question._id));
               console.log(question, question._id, question.isMistake);
               choice = false;
+              setIsQuestionWrong((prevState) => ({
+                ...prevState, 
+                [questionIndex] : true
+              }));
             }
           }
 
@@ -88,6 +108,7 @@ const TestPage = () => {
   };
 
   const activeOption = (questionIndex, answerIndex) => {
+
     // Select all radio inputs for the current question
     const answerDivs = document.querySelectorAll(`.test`);
 
@@ -112,24 +133,29 @@ const TestPage = () => {
 
   return (
     <>
-      {isError ? (
+      {error ? (
         <div className="homepage">
           <h1 className="title error">EVAL</h1>
           <div className="error-prompt">
-            <p>Failed fetching questions.</p>
-            <p>Please try again.</p>
+            {(errorMsg !== '') ? (<p>{errorMsg}</p>) : ( <>
+              <p>Failed fetching questions.</p>
+              <p>Please try again.</p>          
+            </>
+            )}
             <button className="button red" onClick={handleErrorReturn}>back</button>
           </div>
         </div>
-      ) : (isLoading || questions.length < 1) ? (
+      ) : isSpinner ? (
         <Spinner />
       ) : (
         <div className="test-page-container">
           <div className="test-window">
+          <p className="motive">Do Your Best Champ :)</p>
             <ol>
-              {(!isLoading && questions.length > 0)
+              {(!isSpinner && questions.length > 0)
                 ? questions.map((question, questionIndex) => (
-                    <li key={questionIndex}>
+                    <li key={questionIndex} className={(isQuestionWrong[questionIndex] && 
+                        isTestOver) ? "wrong-question" : "correct-question"}>
                       <h3 className="question-text">{question.title}</h3>
                       <div className="answer-options">
                         {question.answers.map((answer) => (
@@ -149,8 +175,10 @@ const TestPage = () => {
                                   selectedAnswers[questionIndex] === answer._id
                                 }
                                 onChange={() => {
-                                  handleAnswers(questionIndex, answer);
-                                  activeOption(questionIndex, answer._id);
+                                  if (!isTestOver) {
+                                    handleAnswers(questionIndex, answer);
+                                    activeOption(questionIndex, answer._id);
+                                  }
                                 }}
                               />
                               <span>{answer.answerBody}</span>
@@ -178,7 +206,7 @@ const TestPage = () => {
             </ol>
             {isTestOver ? (
               <>
-                <p>
+                <p className="score">
                   Your Score: <strong>{totalScore}</strong>/{scores.length}
                 </p>
                 <button

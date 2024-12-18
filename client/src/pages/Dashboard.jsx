@@ -13,7 +13,10 @@ const Dashboard = () => {
   const { isSuccess, isError, isLoading, message, userName } = useSelector(
     (state) => state.auth
   );
-
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [isThereCorrectAnswer, setIsThereCorrectAnswer] = useState(false)
+ 
   //Refs
   const typingTextRef = useRef(null);
   const intervalRef = useRef(null);
@@ -89,7 +92,8 @@ const Dashboard = () => {
     }
 
     if (isError) {
-      //add error prompt and remove console.log
+      setError(true);
+      setErrorMsg(message);
       console.log(message);
     }
 
@@ -141,6 +145,8 @@ const Dashboard = () => {
         },
       ]);
       setAnswerFields(1);
+      setError(false);
+      setErrorMsg('')
     }
   }, [isPosted]);
 
@@ -162,6 +168,7 @@ const Dashboard = () => {
     updatedAnswers[answerIndex].isCorrect =
       !updatedAnswers[answerIndex].isCorrect;
     setPostAnswers(updatedAnswers);
+    setIsThereCorrectAnswer(true);
   };
 
   const removeAnswerField = (index) => {
@@ -177,12 +184,38 @@ const Dashboard = () => {
 
   const handlePost = (e) => {
     e.preventDefault();
+    document.querySelector('#title-input').classList.remove('error');
+    document.querySelector('#course-input').classList.remove('error');
+
     const questionData = {
       title: postQuestions.title,
       answers: postAnswers,
       course: postQuestions.course,
       difficulty: postQuestions.difficulty,
     };
+    if (!questionData.title) {
+      setError(true);
+      setErrorMsg('Please enter the question title');
+      document.querySelector('#title-input').classList.add('error');
+      return;
+    }
+    if (!questionData.course) {
+      setError(true);
+      setErrorMsg('Please enter the course');
+      document.querySelector('#course-input').classList.add('error');
+      return;
+    }
+    if (questionData.answers.length < 2) {
+      setError(true);
+      setErrorMsg('Please enter 2 answer options or more');
+      document.querySelector('.post').classList.add('error');
+      return;
+    }
+    if (!isThereCorrectAnswer) {
+      setError(true);
+      setErrorMsg('Please check the checkbox for the correct answer');
+      return;
+    }
     dispatch(postQuestion(questionData));
     setIsPosted(true);
   };
@@ -191,7 +224,7 @@ const Dashboard = () => {
   return (
     <main className="homepage">
       <h1 className="title">EVAL</h1>
-      <h3 className="welcome" ref={typingTextRef}></h3>
+      <h3 className="welcome"><span ref={typingTextRef}></span></h3>
       {activeSection === dashboardRef ? (
         <>
           <div className="dashboard" ref={dashboardRef}>
@@ -271,6 +304,7 @@ const Dashboard = () => {
                     <label>Question: </label>
                     <input
                       name="title"
+                      id="title-input"
                       className="input post-title"
                       type="text"
                       placeholder="Title"
@@ -323,6 +357,7 @@ const Dashboard = () => {
                     <label>Course: </label>
                     <select
                       name="course"
+                      id="course-input"
                       className="dropdown postDropdown"
                       value={postQuestions.course}
                       onChange={handleQuestionPost}
@@ -384,12 +419,13 @@ const Dashboard = () => {
                       checked={postQuestions.difficulty == 3}
                     />{" "}
                     Hard{" "}
+                    {error ? <p className="error-message">{errorMsg}</p> : null}
                     <div className="button-container">
                       <button type="submit" className="button add">
                         Add Question
                       </button>
                       <button
-                        className="button add"
+                        className="button backPost"
                         id="backButton"
                         onClick={() => {scrollingIntoSection(dashboardRef)
                           setIsPosted(true)

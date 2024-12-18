@@ -9,6 +9,9 @@ const TestParams = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
+
     const [formData, setFormData] = useState({
         course: '',
         difficulty: 0,
@@ -24,6 +27,11 @@ const TestParams = () => {
 
       const onSubmit = (e) => {
         e.preventDefault();
+        if (formData.course === ('')) {
+          setError(true);
+          setErrorMsg('Please select a course');
+          return;
+        }
         dispatch(setParams(formData))
         
         navigate('/test')
@@ -59,6 +67,8 @@ const TestParams = () => {
           <label>Number of Questions: </label>
             <input name="noOfQ" className="input" type="number" min={1} max={100} placeholder="Number of Questions" value={formData.noOfQ} onChange={handleQuestionParams}/>
           </div>
+
+          <p className={error ? 'error-message visible' : 'error-message hidden'}>{errorMsg}</p>
 
           <button type="submit" className="button">Start the Test</button>
       </form>
