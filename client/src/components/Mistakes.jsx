@@ -10,6 +10,8 @@ const Mistakes = () => {
   const { wrongQuestions } = useSelector((state) => state.question);
   const [wrongQuestionCourse, setWrongQuestionCourse] = useState("");
   const [isCourseSelected, setIsCourseSelected] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     dispatch(getWrongQuestions(wrongQuestionCourse));
@@ -26,6 +28,13 @@ const Mistakes = () => {
   };
 
   const handleMistakes = () => {
+    if (!isCourseSelected) {
+      setError(true);
+      setErrorMsg('Please select a course.');
+      return;
+    } else {
+      setError(false);
+    }
     navigate('/mistakes');
   }
 
@@ -55,6 +64,7 @@ const Mistakes = () => {
             <option value={"Signals"}>Signals</option>
           </select>
         </div>
+        {error ? <p className="error-message">{errorMsg}</p> : null}
       </div>
       {isCourseSelected ? (
         <button className="button mistakes" onClick={handleMistakes}>

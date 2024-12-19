@@ -62,9 +62,9 @@ const postQuestion = asyncHandler(async(questionData) => {
 
 const clearRepeated = asyncHandler(async() => {
     try {
-        const token = localStorage.getItem('userToken');
+        const token = localStorage.getItem('userToken')
         console.log(token)
-        const response = await axios.post('http://localhost:5000/api/questions/clear', {
+        const response = await axios.post('http://localhost:5000/api/questions/clear', {}, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

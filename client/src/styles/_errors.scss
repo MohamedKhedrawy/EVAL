@@ -7,48 +7,54 @@
     label {
       color: #00ff00; // Bright green for labels to match the Matrix theme
     }
-  
-    input {
-      border: 2px solid #00ff00;
-      background-color: #111;
-      color: #00ff00;
-      padding: 10px;
-      font-family: inherit;
-      font-size: 0.85rem;
-      outline: none;
-      margin-bottom: 8px;
+
+  }
+
+  .input, .dropdown {
       
-      &:focus {
-        box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
-      }
-  
-      &.error {
-        border-color: #ff3333;
-        box-shadow: 0 0 6px rgba(255, 51, 51, 0.7); // Red glow for errors
-      }
+    &:focus {
+      box-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
     }
-  
-    .error-message {
-      color: #ff3333; // Bright red for error text
-      font-size: 0.75rem;
-      margin-top: 4px;
-      padding-left: 4px;
-      display: none; // Hidden by default
-  
-      &.visible {
-        display: block; // Show only when there's an error
-        animation: blinkRed 1s infinite alternate; // Subtle blink for retro effect
-      }
+
+    &.error {
+      border-color: #ff3333;
+      color: #ff0000;
+      background-color: #330000; // Dark red background for contrast
+      box-shadow: 0 0 6px rgba(255, 51, 51, 0.7); // Red glow for errors
+    }
+  }
+
+  .error-message {
+    color: #ff0000; // Bright red for error text
+    background-color: #330000; // Dark red background for contrast
+    border: 2px solid #ff0000; // Bright red border for error indication
+    line-height: 2.5;
+    width: fit-content;
+    padding: 4px;
+    font-size: 0.75rem;
+    margin-top: 7px;
+    // padding-left: 4px;
+    // display: none; // Hidden by default
+    animation: blinkRed 2s infinite; // Subtle blink for retro effect
+
+
+    &.visible {
+      display: block; // Show only when there's an error
+      animation: blinkRed 2s infinite; // Subtle blink for retro effect
+    } 
+
+    &.hidden {
+      display: none;
     }
   }
   
   // Optional blink animation for the error message
   @keyframes blinkRed {
-    from {
+    100% {
       opacity: 1;
     }
-    to {
-      opacity: 0.7;
+    20% {
+      opacity: 0.3;
     }
   }
 
@@ -60,18 +66,19 @@
   padding: 15px;
   width: 90%;
   max-width: 600px;
+  // min-height: 00px;
   margin: 20px auto;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.85rem;
   text-align: center;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(255, 51, 51, 0.7); // Red glow to enhance visibility
-  position: relative;
+  position: absolute;
   animation: fadeIn 0.3s ease-in-out;
   justify-self: center;
   align-self: center;
   position: relative;
-  top: 80px;
+  top: 50%;
 
   p {
     margin: 0;

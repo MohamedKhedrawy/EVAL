@@ -29,37 +29,102 @@
 //     }
 //   }
 
+
+
+
+
+
+
+// .spinner {
+//   width: 50px;
+//   height: 50px;
+//   border: 4px solid rgba(0, 255, 0, 0.3); // semi-transparent green border
+//   border-top-color: #00ff00; // solid green for the "loading" portion
+//   border-radius: 50%;
+//   animation: spin 1.2s linear infinite;
+//   margin: 20px auto; // Centering if needed
+//   position: relative;
+//   z-index: 1000;
+
+//   // Optional inner pixel dot for a retro look
+//   &::before {
+//     content: '';
+//     width: 8px;
+//     height: 8px;
+//     background-color: #00ff00; // neon green dot
+//     border-radius: 50%;
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     transform: translate(-50%, -50%);
+//   }
+// }
+
+// // Keyframes for the spin animation
+// @keyframes spin {
+//   from {
+//     transform: rotate(0deg);
+//   }
+//   to {
+//     transform: rotate(360deg);
+//   }
+// }
+
+
+
+
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(0, 255, 0, 0.3); // semi-transparent green border
-  border-top-color: #00ff00; // solid green for the "loading" portion
-  border-radius: 50%;
-  animation: spin 1.2s linear infinite;
-  margin: 20px auto; // Centering if needed
-  position: relative;
-  z-index: 1000;
-
-  // Optional inner pixel dot for a retro look
-  &::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    background-color: #00ff00; // neon green dot
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  justify-self: center;
+  align-self: center;
+  height: 100vh; // Full-screen spinner
+  // background-color: #000; // Match the retro background
+  
+  .disk {
+    width: 80px;
+    height: 80px;
+    background: conic-gradient(
+      #00ff00 0%,
+      #00ff00 25%,
+      transparent 25%,
+      transparent 50%,
+      #00ff00 50%,
+      #00ff00 75%,
+      transparent 75%,
+      transparent 100%
+    ); // Pixelated glowing sections
+    border: 4px solid #00ff00; // Neon green border
     border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    animation: spin 1.5s infinite linear, jitter 0.2s infinite;
+    box-shadow: 0 0 8px #00ff00, 0 0 12px #00ff00 inset;
+    position: relative;
+    top: 12%;
+  }
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes jitter {
+    0%, 100% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(-2px, 1px);
+    }
+    50% {
+      transform: translate(2px, -2px);
+    }
+    75% {
+      transform: translate(-1px, 2px);
+    }
   }
 }
 
-// Keyframes for the spin animation
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}

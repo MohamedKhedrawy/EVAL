@@ -1,7 +1,15 @@
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const MistakesPage = () => {
+
+  const navigate = useNavigate();
+  
   const { wrongQuestions } = useSelector((state) => state.question);
+
+  const handleDashboardNav = () => {
+    navigate("/dashboard");
+  };
 
   return (
     <>
@@ -28,6 +36,12 @@ const MistakesPage = () => {
                 ))
               : null}
           </ol>
+          <button
+                  onClick={handleDashboardNav}
+                  className="end-test-button"
+                >
+                  Go Back
+                </button>
         </div>
       </div>
     </>

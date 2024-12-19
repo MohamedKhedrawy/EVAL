@@ -2,12 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { register, reset } from "../features/auth/authSlice.js";
+import Spinner from "../components/Spinner.jsx";
 
 const RegisterPage = () => {
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isSpinner, setIsSpinner] = useState(false);
 
-   const typingTextRef = useRef(null);
-   const intervalRef = useRef(null);
-
+  const typingTextRef = useRef(null);
+  const intervalRef = useRef(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,38 +20,42 @@ const RegisterPage = () => {
   );
 
   useEffect(() => {
-   const text = "Register your account";
-   const typingSpeed = 50;
-   const startingDelay = 500;
-   let index = 0;
+    const text = "Register your account";
+    const typingSpeed = 50;
+    const startingDelay = 500;
+    let index = 0;
 
-   const typingTimeout = setTimeout(() => {
-     intervalRef.current = setInterval(() => {
-       typingTextRef.current.style.fontFamily = '"Press Start 2P", system-ui';
-       if (index < text.length) {
-         typingTextRef.current.innerHTML = text.slice(0, index + 1);
-         index++;
-       } else {
-         typingTextRef.current.innerHTML = text;
-         clearInterval(intervalRef.current);
-       }
-     }, typingSpeed);
-   }, startingDelay);
+    const typingTimeout = setTimeout(() => {
+      intervalRef.current = setInterval(() => {
+        typingTextRef.current.style.fontFamily = '"Press Start 2P", system-ui';
+        if (index < text.length) {
+          typingTextRef.current.innerHTML = text.slice(0, index + 1);
+          index++;
+        } else {
+          typingTextRef.current.innerHTML = text;
+          clearInterval(intervalRef.current);
+        }
+      }, typingSpeed);
+    }, startingDelay);
 
-   return () => {
-     clearInterval(intervalRef.current);
-     clearTimeout(typingTimeout);
-   };
- }, []);
+    return () => {
+      clearInterval(intervalRef.current);
+      clearTimeout(typingTimeout);
+    };
+  }, []);
 
   useEffect(() => {
     if (isLoading) {
-      //add spinner
+      setIsSpinner(true);
+    } else {
+      setIsSpinner(false);
     }
 
     if (isError) {
-      //add error prompt and remove console.log
+      setError(true);
+      setErrorMsg(message);
       console.log(message);
+      console.log("errorMsg");
     }
 
     if (isSuccess) {
@@ -80,69 +87,84 @@ const RegisterPage = () => {
       const userData = { name, email, password, confirmPassword };
       dispatch(register(userData));
     } else {
-      console.log("Passwords do not match");
+      setErrorMsg("Passwords don't match");
+      setError(true);
     }
   };
 
   return (
     <>
-      <div className="homepage">
-        <h1 className="title login">EVAL</h1>
-        <h3 className="welcome" ref={typingTextRef}></h3>
-        <div className="feature-section register">
-          <div className="parameter login">
-            <form className="question-form login" onSubmit={onSubmit}>
-               <div className="input-container">
-               <label htmlFor="name">Name</label>
-               <input
-              className="input login"
-                name="name"
-                type="name"
-                value={name}
-                placeholder="Name"
-                required
-                onChange={onChange}
-              />
-               <label htmlFor="email">Email</label>              
-              <input
-              className='input'
-                name="email"
-                type="email"
-                value={email}
-                placeholder="Email"
-                required
-                onChange={onChange}
-              />
-               <label htmlFor="password">Password</label>
-              <input
-              className='input'
-                name="password"
-                type="password"
-                value={password}
-                placeholder="Password"
-                required
-                onChange={onChange}
-              />
-               <label htmlFor="confirmPassword">Confirm Password</label>
-              <input
-              className='input'
-                name="confirmPassword"
-                type="password"
-                value={confirmPassword}
-                placeholder="Confirm Password"
-                required
-                onChange={onChange}
-              />  
-               </div>
-              <button type="submit" className="button register">Register</button>
-              <p className="redirect">
-                  Already have an account?{" "}
-                  <Link to={"/login"} className="register-here">Log in here</Link>
+      {isSpinner ? (
+        <Spinner />
+      ) : (
+        <div className="homepage">
+          <h1 className="title login">EVAL</h1>
+          <div className="main-register">
+            <h3 className="welcome login"><span ref={typingTextRef}></span></h3>
+            <div className="feature-section register">
+              <div className="register-box">
+                <form className="question-form-login" onSubmit={onSubmit}>
+                  <div className="input-container">
+                    <label htmlFor="name">Name</label>
+                    <input
+                      className="input"
+                      name="name"
+                      type="name"
+                      value={name}
+                      placeholder="Name"
+                      required
+                      onChange={onChange}
+                    />
+                    <label htmlFor="email">Email</label>
+                    <input
+                      className="input"
+                      name="email"
+                      type="email"
+                      value={email}
+                      placeholder="Email"
+                      required
+                      onChange={onChange}
+                    />
+                    <label htmlFor="password">Password</label>
+                    <input
+                      className="input"
+                      name="password"
+                      type="password"
+                      value={password}
+                      placeholder="Password"
+                      required
+                      onChange={onChange}
+                    />
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <input
+                      className="input"
+                      name="confirmPassword"
+                      type="password"
+                      value={confirmPassword}
+                      placeholder="Confirm Password"
+                      required
+                      onChange={onChange}
+                    />
+                    <input type="submit" style={{display:"none"}}></input>
+                    {isError || error ? (
+                      <p className="error-message">{errorMsg}</p>
+                    ) : null}
+                  </div>
+                </form>
+                <button type="submit" className="button register">
+                    Register
+                  </button>
+                  <p className="redirect">
+                    Already have an account?{" "}
+                    <Link to={"/login"} className="register-here">
+                      Log in here
+                    </Link>
                   </p>
-            </form>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
