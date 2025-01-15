@@ -6,7 +6,7 @@ import {
   setQuestions,
   toggleIsMistake,
 } from "../features/question/questionSlice.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../components/Spinner.jsx";
 
@@ -18,10 +18,13 @@ const TestPage = () => {
   const [scores, setScores] = useState([]);
   const [rightAnswers, setRightAnswers] = useState([]);
   const [isQuestionWrong, setIsQuestionWrong] = useState([false]);
+  const [testTime, setTestTime] = useState(null);
 
   const [isSpinner, setIsSpinner] = useState(true);
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  const timer = useRef(testTime);
 
   const { params, questions, isError, isSuccess, isLoading, message } =
     useSelector((state) => state.question);
@@ -29,11 +32,26 @@ const TestPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+
   useEffect(() => {
     dispatch(getQuestions(params));
-    setParams({});
     setIsSpinner(true);
   }, [params, dispatch]);
+
+  useEffect(() => {
+
+    let timerInterval;
+    
+    if ((testTime > 0)) {
+      timerInterval = setInterval(() => {
+        setTestTime((prevTime) => prevTime - 1)
+      }, 1000)
+    } else {
+      setIsTestOver(true);
+      clearInterval(timerInterval);
+    }
+    return () => clearInterval(timerInterval);
+  }, [testTime, isTestOver])
 
   useEffect(() => {
     if (isLoading) {
@@ -51,6 +69,8 @@ const TestPage = () => {
 
     if (isSuccess) {
       console.log(isLoading);
+      setTestTime(params.time * 60);
+      console.log(testTime);
     }
 
     if (Object.keys(params).length === 0) {
@@ -149,8 +169,9 @@ const TestPage = () => {
         <Spinner />
       ) : (
         <div className="test-page-container">
+          <p className="timer">{`${Math.floor(testTime / 60)}:${testTime % 60}`}</p>
           <div className="test-window">
-          <p className="motive">Do Your Best Champ :)</p>
+          <p className="motive"></p>
             <ol>
               {(!isSpinner && questions.length > 0)
                 ? questions.map((question, questionIndex) => (

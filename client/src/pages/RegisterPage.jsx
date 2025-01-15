@@ -107,7 +107,7 @@ const RegisterPage = () => {
                   <div className="input-container">
                     <label htmlFor="name">Name</label>
                     <input
-                      className="input"
+                      className="input login"
                       name="name"
                       type="name"
                       value={name}
@@ -117,7 +117,7 @@ const RegisterPage = () => {
                     />
                     <label htmlFor="email">Email</label>
                     <input
-                      className="input"
+                      className="input login"
                       name="email"
                       type="email"
                       value={email}
@@ -127,7 +127,7 @@ const RegisterPage = () => {
                     />
                     <label htmlFor="password">Password</label>
                     <input
-                      className="input"
+                      className="input login"
                       name="password"
                       type="password"
                       value={password}
@@ -137,7 +137,7 @@ const RegisterPage = () => {
                     />
                     <label htmlFor="confirmPassword">Confirm Password</label>
                     <input
-                      className="input"
+                      className="input login"
                       name="confirmPassword"
                       type="password"
                       value={confirmPassword}

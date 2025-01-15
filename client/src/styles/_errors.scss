@@ -36,15 +36,20 @@
     // padding-left: 4px;
     // display: none; // Hidden by default
     animation: blinkRed 2s infinite; // Subtle blink for retro effect
+    display: block;
 
 
     &.visible {
-      display: block; // Show only when there's an error
+      visibility: visible; // Show only when there's an error
       animation: blinkRed 2s infinite; // Subtle blink for retro effect
     } 
 
     &.hidden {
-      display: none;
+      visibility: hidden;
+    }
+
+    &.test {
+      margin-top: 0;
     }
   }
   
