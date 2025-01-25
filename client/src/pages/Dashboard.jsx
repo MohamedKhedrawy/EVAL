@@ -389,7 +389,10 @@ const Dashboard = () => {
                       >
                         Use Question Form
                       </button>
-                      <button className="button">Back To Home</button>
+                      <button className="button" onClick={() => {
+                            scrollingIntoSection(dashboardRef);
+                            setIsPosted(true);
+                          }}>Back To Home</button>
                     </div>
                   </form>
                 ) : (
