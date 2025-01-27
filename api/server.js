@@ -21,10 +21,7 @@ server.use(
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 
-server.use("/api/users", userRoutes);
-server.use("/api/questions", questionRoutes);
+server.use("/users", userRoutes);
+server.use("/questions", questionRoutes);
 server.use(errorHandler);
 
-server.listen(PORT, () => {
-  console.log(`server started on port ${PORT}`);
-});
