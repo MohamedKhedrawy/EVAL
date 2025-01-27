@@ -150,7 +150,7 @@ body {
   font-family: "Roboto", monospace;
 }
 .feature-section.register {
-  min-height: 80%;
+  min-height: 85%;
   opacity: 1;
 }
 .feature-section.login {
@@ -359,14 +359,11 @@ label {
 }
 .button.login {
   align-self: center;
-  margin-bottom: 10px;
   position: relative;
   min-width: 80%;
   width: 80%;
-  bottom: 9%;
 }
 .button.register {
-  position: relative;
   margin-bottom: 0px;
   bottom: 10%;
   min-width: 80%;
@@ -501,15 +498,9 @@ input[type=radio]:checked {
   justify-self: center;
   align-self: center;
   text-align: center;
-  margin-top: 10px;
+  margin: 10px 0px;
   padding: 0 20px;
-  position: relative;
-  bottom: 9%;
 }
-.redirect.login {
-  bottom: 9%;
-}
-
 .input-container {
   display: flex;
   flex-direction: column;

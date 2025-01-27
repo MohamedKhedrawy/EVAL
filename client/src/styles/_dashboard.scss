@@ -166,7 +166,7 @@ body {
   }
 
   &.register {
-    min-height: 80%;
+    min-height: 85%;
     opacity: 1;
   }
 
@@ -423,17 +423,17 @@ label {
 
   &.login {
     align-self: center;
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
     // margin-top: 40px;
     position: relative;
     min-width: 80%;
     width: 80%;
     // left: 27%;
-    bottom: 9%;
+    // bottom: 9%;
   }
 
   &.register {
-    position: relative;
+    // position: relative;
     // align-self: center;
     margin-bottom: 0px;
     bottom: 10%;
@@ -576,14 +576,14 @@ input[type="radio"] {
   justify-self: center;
   align-self: center;
   text-align: center;
-  margin-top: 10px;
+  margin: 10px 0px;
   // left: 27%;
   padding: 0 20px;
-  position: relative;
-  bottom: 9%;
+  // position: relative;
+  // bottom: 9%;
 
   &.login {
-    bottom: 9%;
+    // bottom: 9%;
     // max-width: 80%;
   }
 }
