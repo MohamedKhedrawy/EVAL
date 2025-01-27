@@ -3,8 +3,8 @@ import cors from "cors";
 import { connectDB } from "./db.js";
 import "dotenv/config";
 import { errorHandler } from "./middleware/errorsMiddleware.js";
-import userRoutes from "./userRoutes.js";
-import questionRoutes from "./questionRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import questionRoutes from "./routes/questionRoutes.js";
 
 const PORT = process.env.PORT;
 const server = express();
