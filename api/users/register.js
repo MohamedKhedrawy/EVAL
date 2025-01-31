@@ -1,5 +1,5 @@
 import { registerUser } from "../controllers/usersController.js";
-import { validateRequest, validateRegisterBody } from "./validate.js";
+import { validateRequest, validateRegisterBody } from "../validate.js";
 
 export const handler = async (event) => {
   try {
