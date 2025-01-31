@@ -1,9 +1,9 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/api/users/register", "dest": "/api/users/register.js" },
-    { "src": "/api/users/login", "dest": "/api/users/login.js" },
-    { "src": "/api/users/myinfo", "dest": "/api/users/myinfo.js" }
+    { "src": "/api/users/register", "dest": "/users/register.js" },
+    { "src": "/api/users/login", "dest": "/users/login.js" },
+    { "src": "/api/users/myinfo", "dest": "/users/myinfo.js" }
   ],
   "functions": {
     "api/users/*.js": { "runtime": "nodejs18.x" },
