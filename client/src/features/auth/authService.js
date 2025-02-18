@@ -1,9 +1,10 @@
 import asyncHandler from 'express-async-handler';
 import axios from 'axios'
+import "dotenv/config";
 
 const register = asyncHandler(async(userData) => {
     try {
-        await axios.post(`${process.env.API_URL}/api/users/register`, userData);
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/register`, userData);
     } catch (error) {
         throw error.response?.data?.message || 'Register Failed'
     } 
@@ -11,7 +12,7 @@ const register = asyncHandler(async(userData) => {
 
 const login = asyncHandler(async(userData) => {
     try {
-        const response = await axios.post(`${process.env.API_URL}/api/users/login`, userData);
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users/login`, userData);
         const token = localStorage.getItem('userToken');
         if (token) {
             localStorage.removeItem('userToken')
@@ -29,7 +30,7 @@ const logout = () => {
 const getMyInfo = asyncHandler(async() => {
     try {
         const token = localStorage.getItem('userToken')
-        const user = await axios.get(`${process.env.API_URL}/api/users/myinfo`, {
+        const user = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/users/myinfo`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

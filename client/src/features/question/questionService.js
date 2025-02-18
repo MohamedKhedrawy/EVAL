@@ -1,11 +1,12 @@
 import asyncHandler from "express-async-handler";
 import axios from "axios";
+import "dotenv/config";
 
 const getQuestions = asyncHandler(async (params) => {
   try {
     const token = localStorage.getItem("userToken");
     const { course, difficulty, noOfQ } = params;
-    const questions = await axios.get(`${process.env.API_URL}/api/questions`, {
+    const questions = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/questions`, {
       params: { course, difficulty, noOfQ },
       headers: {
         Authorization: `Bearer ${token}`,
@@ -21,7 +22,7 @@ const getWrongQuestions = asyncHandler(async (course) => {
   try {
     const token = localStorage.getItem("userToken");
     const wrongQuestions = await axios.get(
-      `${process.env.API_URL}/api/questions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/questions`,
       {
         params: { course },
         headers: {
@@ -39,7 +40,7 @@ const toggleIsMistake = asyncHandler(async (questionId) => {
   try {
     const token = localStorage.getItem("userToken");
     await axios.put(
-      `${process.env.API_URL}/api/questions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/questions`,
       { questionId },
       {
         headers: {
@@ -57,7 +58,7 @@ const postQuestion = asyncHandler(async (questionData) => {
   try {
     const token = localStorage.getItem("userToken");
     const response = await axios.post(
-      `${process.env.API_URL}/api/questions`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/questions`,
       questionData,
       {
         headers: {
@@ -76,7 +77,7 @@ const clearRepeated = asyncHandler(async () => {
     const token = localStorage.getItem("userToken");
     console.log(token);
     const response = await axios.post(
-      `${process.env.API_URL}/api/questions/clear`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/questions/clear`,
       {},
       {
         headers: {
