@@ -15,8 +15,8 @@ connectDB();
 
 server.use(
   cors({
-    origin: "*",
-    credentials:true
+    origin: true,
+    credentials: true
   })
 );
 
