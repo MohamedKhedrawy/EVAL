@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import axios from 'axios'
-import "dotenv/config";
+// import "dotenv/config";
 
 const register = asyncHandler(async(userData) => {
     try {
