@@ -15,7 +15,7 @@ connectDB();
 
 server.use(
   cors({
-    origin: "https://eval-vercel.vercel.app",
+    origin: "*",
     credentials:true
   })
 );
