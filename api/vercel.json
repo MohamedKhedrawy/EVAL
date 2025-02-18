@@ -1,12 +1,14 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/api/users/register", "dest": "/users/register.js" },
-    { "src": "/api/users/login", "dest": "/users/login.js" },
-    { "src": "/api/users/myinfo", "dest": "/users/myinfo.js" }
+    { "src": "/api/users/register", "dest": "/users/server.js" },
+    { "src": "/api/users/login", "dest": "/users/server.js" },
+    { "src": "/api/users/myinfo", "dest": "/users/server.js" },
+    { "src": "/api/questions/", "dest": "/users/server.js" },
+    { "src": "/api/questions/clear", "dest": "/users/server.js" },
+    { "src": "/api/questions/wrong", "dest": "/users/server.js" }
   ],
   "functions": {
-    "api/users/*.js": { "runtime": "nodejs18.x" },
-    "api/questions/*.js": { "runtime": "nodejs18.x" }
+    "api/server.js": { "runtime": "nodejs18.x" }
   }
 }

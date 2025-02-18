@@ -32,4 +32,4 @@ server.use(errorHandler);
 // });
 
 // Export as a serverless function
-export const handler = serverless(app);
+export const handler = serverless(server);
