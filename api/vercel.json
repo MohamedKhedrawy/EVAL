@@ -1,14 +1,14 @@
 {
   "version": 2,
   "routes": [
-    { "src": "/api/users/register", "dest": "/api/server.js" },
-    { "src": "/api/users/login", "dest": "/api/server.js" },
-    { "src": "/api/users/myinfo", "dest": "/api/server.js" },
-    { "src": "/api/questions/.*", "dest": "/api/server.js" },
-    { "src": "/api/questions/clear", "dest": "/api/server.js" },
-    { "src": "/api/questions/wrong", "dest": "/api/server.js" }
+    { "src": "/api/users/register", "dest": "/api/index.js" },
+    { "src": "/api/users/login", "dest": "/api/index.js" },
+    { "src": "/api/users/myinfo", "dest": "/api/index.js" },
+    { "src": "/api/questions/.*", "dest": "/api/index.js" },
+    { "src": "/api/questions/clear", "dest": "/api/index.js" },
+    { "src": "/api/questions/wrong", "dest": "/api/index.js" }
   ],
   "functions": {
-    "api/server.js": { "runtime": "vercel-node@1.12.0" }
+    "api/index.js": { "runtime": "vercel-node@1.12.0i" }
   }
 }
