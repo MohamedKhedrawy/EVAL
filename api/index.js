@@ -15,7 +15,7 @@ connectDB();
 
 server.use(
   cors({
-    origin: "https://eval-vercel-7acjc9zl4-mohamed-khedrawys-projects.vercel.app",
+    origin: "https://eval-vercel.vercel.app",
     credentials:true
   })
 );
