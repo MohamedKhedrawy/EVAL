@@ -9,6 +9,6 @@
     { "src": "/api/questions/wrong", "dest": "/api/index.js" }
   ],
   "functions": {
-    "api/index.js": { "runtime": "vercel-node@1.12.0i" }
+    "api/index.js": { "runtime": "nodejs18.x" }
   }
 }
