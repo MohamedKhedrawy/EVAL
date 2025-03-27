@@ -12,10 +12,6 @@ const ClearRepeated = () => {
     const [isCleared, setIsCleared] = useState(false);
 
     useEffect(() => {
-        setIsCleared(false);
-    }, [])
-
-    useEffect(() => {
         if (isSuccess) {
             console.log(message);
             setIsCleared(true);
@@ -31,7 +27,7 @@ const ClearRepeated = () => {
         dispatch(clearRepeated());
     }
 
-    return <div className="question-form clear">
+    return <div className="question-form">
         <h2>Clear Repeated Questions</h2>
         <button onClick={handleClearRepeated} className="button long">Clear Repeated Questions</button>
         {(isCleared && isSuccess) ? (<p className="repeated-msg">The Past Has Been Erased</p>) 
