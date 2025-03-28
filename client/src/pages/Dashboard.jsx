@@ -3,10 +3,10 @@ import Mistakes from "../components/Mistakes.jsx";
 import QuestionPost from "../components/QuestionPost.jsx";
 import ClearRepeated from "../components/ClearRepeated.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import { getMyInfo, logout, reset } from "../features/auth/authSlice.js";
 import { useEffect, useState, useRef } from "react";
-import { postQuestion } from "../features/question/questionSlice";
+import { postQuestion, setParams } from "../features/question/questionSlice";
 
 const Dashboard = () => {
   //States
@@ -14,9 +14,12 @@ const Dashboard = () => {
     (state) => state.auth
   );
   const [error, setError] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-  const [isThereCorrectAnswer, setIsThereCorrectAnswer] = useState(false)
- 
+  const [errorMsg, setErrorMsg] = useState("");
+  const [isThereCorrectAnswer, setIsThereCorrectAnswer] = useState(false);
+  const [isJson, setIsJson] = useState(false);
+  const [jsonText, setJsonText] = useState("");
+  const [jsonFile, setJsonFile] = useState("");
+
   //Refs
   const typingTextRef = useRef(null);
   const intervalRef = useRef(null);
@@ -37,6 +40,7 @@ const Dashboard = () => {
   //get userName
   useEffect(() => {
     dispatch(getMyInfo());
+    dispatch(setParams({}));
   }, [dispatch]);
 
   //attach userName to ref
@@ -53,11 +57,14 @@ const Dashboard = () => {
     if (activeSection === testParamsRef) {
       text = `Let's EVALuate, Set your parameters`;
     }
-    if (activeSection === questionPostRef) {
+    if (activeSection === questionPostRef && !isJson) {
       text = `Found a new question? Add it to the inventory`;
     }
+    if (activeSection === questionPostRef && isJson) {
+      text = `Paste JSON text in the textbox or upload a JSON file`;
+    }
     if (activeSection === clearRepeatedRef) {
-      text = `Want to master your `;
+      text = `Clearing up the clutter for a sharper focus`;
     }
     if (activeSection === mistakesRef) {
       text = `Conquer your mind. Master your fears`;
@@ -83,7 +90,7 @@ const Dashboard = () => {
       clearInterval(intervalRef.current);
       clearTimeout(typingTimeout);
     };
-  }, [userName, activeSection]);
+  }, [userName, activeSection, isJson]);
 
   //watches Logout
   useEffect(() => {
@@ -146,7 +153,7 @@ const Dashboard = () => {
       ]);
       setAnswerFields(1);
       setError(false);
-      setErrorMsg('')
+      setErrorMsg("");
     }
   }, [isPosted]);
 
@@ -184,8 +191,8 @@ const Dashboard = () => {
 
   const handlePost = (e) => {
     e.preventDefault();
-    document.querySelector('#title-input').classList.remove('error');
-    document.querySelector('#course-input').classList.remove('error');
+    document.querySelector("#title-input").classList.remove("error");
+    document.querySelector("#course-input").classList.remove("error");
 
     const questionData = {
       title: postQuestions.title,
@@ -195,36 +202,82 @@ const Dashboard = () => {
     };
     if (!questionData.title) {
       setError(true);
-      setErrorMsg('Please enter the question title');
-      document.querySelector('#title-input').classList.add('error');
+      setErrorMsg("Please enter the question title");
+      document.querySelector("#title-input").classList.add("error");
       return;
     }
     if (!questionData.course) {
       setError(true);
-      setErrorMsg('Please enter the course');
-      document.querySelector('#course-input').classList.add('error');
+      setErrorMsg("Please enter the course");
+      document.querySelector("#course-input").classList.add("error");
       return;
     }
     if (questionData.answers.length < 2) {
       setError(true);
-      setErrorMsg('Please enter 2 answer options or more');
-      document.querySelector('.post').classList.add('error');
+      setErrorMsg("Please enter 2 answer options or more");
+      document.querySelector(".post").classList.add("error");
       return;
     }
     if (!isThereCorrectAnswer) {
       setError(true);
-      setErrorMsg('Please check the checkbox for the correct answer');
+      setErrorMsg("Please check the checkbox for the correct answer");
       return;
     }
     dispatch(postQuestion(questionData));
     setIsPosted(true);
+  };
+
+  const switchJson = () => {
+    setIsJson(true);
+  };
+  const handleJsonFile = (e) => {
+    const jsonFile = e.target.files[0];
+
+    if (jsonFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const jsonData = JSON.parse(event.target.result);
+        setJsonFile(jsonData);
+      };
+
+      reader.readAsText(jsonFile);
+    }
+  };
+
+  const handleJsonText = (e) => {
+    e.preventDefault();
+    if (jsonText) {
+      try {
+        const jsonData = JSON.parse(jsonText);
+        console.log(jsonData);
+        dispatch(postQuestion(jsonData));
+      } catch (error) {
+        console.log("Invalid Format: ", error);
+        setError(true);
+        setErrorMsg(`Invalid Format: ${error.message}`);
+      }
+    } else if (jsonFile) {
+      try {
+        console.log(jsonFile);
+        dispatch(postQuestion(jsonFile));
+      } catch (error) {
+        console.log("Invalid File Format: ", error);
+        setError(true);
+        setErrorMsg(`Invalid File Format: ${error.message}`);
+      }
+    } else {
+      console.log("an error occured");
+    }
   };
   //end of questionPost component
 
   return (
     <main className="homepage">
       <h1 className="title">EVAL</h1>
-      <h3 className="welcome"><span ref={typingTextRef}></span></h3>
+      <h3 className="welcome">
+        <span ref={typingTextRef}></span>
+      </h3>
       {activeSection === dashboardRef ? (
         <>
           <div className="dashboard" ref={dashboardRef}>
@@ -241,9 +294,10 @@ const Dashboard = () => {
             </div>
             <div
               className="panel"
-              onClick={() => {scrollingIntoSection(questionPostRef)
-                setIsPosted(false);}
-              }
+              onClick={() => {
+                scrollingIntoSection(questionPostRef);
+                setIsPosted(false);
+              }}
             >
               <h3>Post New Question</h3>
               <p>
@@ -298,144 +352,226 @@ const Dashboard = () => {
               } post`}
             >
               <>
-                <form onSubmit={handlePost} className="question-form">
-                  <h2>Post New Question</h2>
-                  <div className="parameter post">
-                    <label>Question: </label>
+                {isJson ? (
+                  <form
+                    className="question-form json"
+                    onSubmit={handleJsonText}
+                  >
+                    <label htmlFor="jsonText">JSON Text</label>
+                    <textarea
+                      name="jsonText"
+                      className="jsonInput"
+                      placeholder="Paste JSON Text Here"
+                      rows="10"
+                      cols="50"
+                      onChange={(e) => {
+                        setJsonText(e.target.value);
+                      }}
+                    ></textarea>
+                    <label htmlFor="jsonFile">Import JSON File</label>
                     <input
-                      name="title"
-                      id="title-input"
-                      className="input post-title"
-                      type="text"
-                      placeholder="Title"
-                      value={postQuestions.title}
-                      required
-                      onChange={handleQuestionPost}
-                    />
-                    <div>
-                      <label>Answers: </label>
-                      {postAnswers.map((answer, answerIndex) => (
-                        <div key={answerIndex} className="answerdiv">
-                          <input
-                            className="input post"
-                            type="text"
-                            name={`Answer ${answerIndex + 1}`}
-                            value={answer.answerBody}
-                            placeholder={`Answer ${answerIndex + 1}`}
-                            onChange={(e) => handleAnswerPost(e, answerIndex)}
-                            required
-                          />
-
-                          <div className="checkbox-group answer">
-                            <input
-                              id={answerIndex}
-                              name="isCorrect"
-                              type="checkbox"
-                              checked={answer.isCorrect}
-                              onChange={() => handleToggleCorrect(answerIndex)}
-                            />
-                            <label htmlFor={answerIndex}>Correct Answer</label>
-                            <button
-                              type="button"
-                              className="button small"
-                              onClick={() => removeAnswerField(answerIndex)}
-                              disabled={answerFields <= 1}
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        </div>
-                      ))}
+                      name="jsonFile"
+                      className="json-file"
+                      type="file"
+                      accept=".json"
+                      onChange={handleJsonFile}
+                    ></input>
+                    <div className="button-container json">
+                      <button type="submit" className="button ">
+                        Submit JSON
+                      </button>
                       <button
                         type="button"
-                        className="button add"
-                        onClick={addAnswerField}
-                      >
-                        Add New Choice
-                      </button>
-                    </div>
-                    <label>Course: </label>
-                    <select
-                      name="course"
-                      id="course-input"
-                      className="dropdown postDropdown"
-                      value={postQuestions.course}
-                      onChange={handleQuestionPost}
-                    >
-                      <option value={""}>Select a Course</option>
-                      <option value={"geo"}>Geo</option>
-                      <option value={"OOP"}>OOP</option>
-                      <option value={"Data Communication"}>
-                        Data Communication
-                      </option>
-                      <option value={"Information Systems"}>
-                        Information Systems
-                      </option>
-                      <option value={"Discrete Maths"}>Discrete Maths</option>
-                      <option value={"Project Management"}>
-                        Project Management
-                      </option>
-                      <option value={"Business Management"}>
-                        Business Management
-                      </option>
-                      <option value={"Technical Writing"}>
-                        Technical Writing
-                      </option>
-                      <option value={"Probability & Statistics"}>
-                        Probability & Statistics
-                      </option>
-                      <option value={"Signals"}>Signals</option>
-                    </select>
-                    <label>Diffficulty: </label>
-                    <input
-                      type="radio"
-                      value={0}
-                      name="difficulty"
-                      onChange={handleQuestionPost}
-                      checked={postQuestions.difficulty == 0}
-                    />{" "}
-                    Undefined{" "}
-                    <input
-                      type="radio"
-                      value={1}
-                      name="difficulty"
-                      onChange={handleQuestionPost}
-                      checked={postQuestions.difficulty == 1}
-                    />{" "}
-                    Easy{" "}
-                    <input
-                      type="radio"
-                      value={2}
-                      name="difficulty"
-                      onChange={handleQuestionPost}
-                      checked={postQuestions.difficulty == 2}
-                    />{" "}
-                    Intermediate{" "}
-                    <input
-                      type="radio"
-                      value={3}
-                      name="difficulty"
-                      onChange={handleQuestionPost}
-                      checked={postQuestions.difficulty == 3}
-                    />{" "}
-                    Hard{" "}
-                    {error ? <p className="error-message">{errorMsg}</p> : null}
-                    <div className="button-container">
-                      <button type="submit" className="button add">
-                        Add Question
-                      </button>
-                      <button
-                        className="button backPost"
-                        id="backButton"
-                        onClick={() => {scrollingIntoSection(dashboardRef)
-                          setIsPosted(true)
+                        className="button switchBack"
+                        onClick={() => {
+                          setIsJson(false);
                         }}
                       >
-                        Go back
+                        Use Question Form
                       </button>
+                      <button className="button" onClick={() => {
+                            scrollingIntoSection(dashboardRef);
+                            setIsPosted(true);
+                          }}>Back To Home</button>
                     </div>
-                  </div>
-                </form>
+                  </form>
+                ) : (
+                  <form onSubmit={handlePost} className="question-form">
+                    <h2>Post New Question</h2>
+                    <div className="parameter post">
+                      <label>Question: </label>
+                      <input
+                        name="title"
+                        id="title-input"
+                        className="input post-title"
+                        type="text"
+                        placeholder="Title"
+                        value={postQuestions.title}
+                        required
+                        onChange={handleQuestionPost}
+                      />
+                      <div>
+                        <label>Answers: </label>
+                        {postAnswers.map((answer, answerIndex) => (
+                          <div key={answerIndex} className="answerdiv">
+                            <input
+                              className="input answerfield"
+                              type="text"
+                              name={`Answer ${answerIndex + 1}`}
+                              value={answer.answerBody}
+                              placeholder={`Answer ${answerIndex + 1}`}
+                              onChange={(e) => handleAnswerPost(e, answerIndex)}
+                              required
+                            />
+
+                            <div className="checkbox-group answer">
+                              <input
+                                id={answerIndex}
+                                name="isCorrect"
+                                type="checkbox"
+                                checked={answer.isCorrect}
+                                onChange={() =>
+                                  handleToggleCorrect(answerIndex)
+                                }
+                              />
+                              <label
+                                htmlFor={answerIndex}
+                                className="correct-label"
+                              >
+                                Correct Answer
+                              </label>
+                              <button
+                                type="button"
+                                id="removeIcon"
+                                // className="button small"
+                                onClick={() => removeAnswerField(answerIndex)}
+                                disabled={answerFields <= 1}
+                              >
+                                <img src="../../public/images/minus.png" alt="remove" />
+                              </button>
+                              <button
+                                type="button"
+                                id="removeButton"
+                                className="button small"
+                                onClick={() => removeAnswerField(answerIndex)}
+                                disabled={answerFields <= 1}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          className="button add"
+                          onClick={addAnswerField}
+                        >
+                          Add New Choice
+                        </button>
+                      </div>
+                      <label>Course: </label>
+                      <select
+                        name="course"
+                        id="course-input"
+                        className="dropdown postDropdown"
+                        value={postQuestions.course}
+                        onChange={handleQuestionPost}
+                      >
+                        <option value={""}>Select a Course</option>
+                        <option value={"geo"}>Geo</option>
+                        <option value={"OOP"}>OOP</option>
+                        <option value={"Data Communication"}>
+                          Data Communication
+                        </option>
+                        <option value={"Information Systems"}>
+                          Information Systems
+                        </option>
+                        <option value={"Discrete Maths"}>Discrete Maths</option>
+                        <option value={"Project Management"}>
+                          Project Management
+                        </option>
+                        <option value={"Business Management"}>
+                          Business Management
+                        </option>
+                        <option value={"Technical Writing"}>
+                          Technical Writing
+                        </option>
+                        <option value={"Probability & Statistics"}>
+                          Probability & Statistics
+                        </option>
+                        <option value={"Signals"}>Signals</option>
+                      </select>
+                      <div className="parameter radio-group">
+                        <label className="diff-label">Diffficulty: </label>
+                        <div>
+                          <input
+                            type="radio"
+                            value={0}
+                            name="difficulty"
+                            onChange={handleQuestionPost}
+                            checked={postQuestions.difficulty == 0}
+                          />{" "}
+                          Undefined{" "}
+                        </div>
+                        <div>
+                          <input
+                            type="radio"
+                            value={1}
+                            name="difficulty"
+                            onChange={handleQuestionPost}
+                            checked={postQuestions.difficulty == 1}
+                          />{" "}
+                          Easy{" "}
+                        </div>
+                        <div>
+                          <input
+                            type="radio"
+                            value={2}
+                            name="difficulty"
+                            onChange={handleQuestionPost}
+                            checked={postQuestions.difficulty == 2}
+                          />{" "}
+                          Intermediate{" "}
+                        </div>
+                        <div>
+                          <input
+                            type="radio"
+                            value={3}
+                            name="difficulty"
+                            onChange={handleQuestionPost}
+                            checked={postQuestions.difficulty == 3}
+                          />{" "}
+                          Hard{" "}
+                        </div>
+                      </div>
+                      {error ? (
+                        <p className="error-message">{errorMsg}</p>
+                      ) : null}
+                      <div className="button-container">
+                        <button type="submit" className="button add post">
+                          Add Question
+                        </button>
+                        <button
+                          className="button import"
+                          type="button"
+                          onClick={switchJson}
+                        >
+                          Import JSON File
+                        </button>
+                        <button
+                          className="button backPost"
+                          id="backButton"
+                          onClick={() => {
+                            scrollingIntoSection(dashboardRef);
+                            setIsPosted(true);
+                          }}
+                        >
+                          Go back
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                )}
               </>
             </div>
           ) : null}

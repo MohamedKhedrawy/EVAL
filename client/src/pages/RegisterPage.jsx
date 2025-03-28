@@ -83,12 +83,37 @@ const RegisterPage = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      const userData = { name, email, password, confirmPassword };
-      dispatch(register(userData));
-    } else {
+    if (!name || !email || !password || !confirmPassword) {
+      setErrorMsg("Please fill in all fields");
+      setError(true);
+    }
+    if (password.length < 6) {
+      setErrorMsg("Password must be at least 6 characters");
+      setError(true);
+    }
+    if (password.length > 20) {
+      setErrorMsg("Password must be less than 20 characters");
+      setError(true);
+    }
+    if (name.length > 20) {
+      setErrorMsg("Name must be less than 20 characters");
+      setError(true);
+    }
+    if (name.length < 5) {
+      setErrorMsg("Name must be more than 5 characters");
+      setError(true);
+    }
+    if (email.length > 50) {
+      setErrorMsg("Email must be less than 50 characters");
+      setError(true);
+    }
+    if (password !== confirmPassword) {
       setErrorMsg("Passwords don't match");
       setError(true);
+    }
+    if (!error) {
+      const userData = { name, email, password, confirmPassword };
+      dispatch(register(userData));
     }
   };
 
@@ -150,8 +175,7 @@ const RegisterPage = () => {
                       <p className="error-message">{errorMsg}</p>
                     ) : null}
                   </div>
-                </form>
-                <button type="submit" className="button register">
+                  <button type="submit" className="button registerPage" onClick={onSubmit}>
                     Register
                   </button>
                   <p className="redirect">
@@ -160,6 +184,9 @@ const RegisterPage = () => {
                       Log in here
                     </Link>
                   </p>
+                </form>
+
+
               </div>
             </div>
           </div>

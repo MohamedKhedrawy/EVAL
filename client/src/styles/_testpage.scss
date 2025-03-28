@@ -331,3 +331,138 @@
     box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
   }
 }
+
+.timer {
+  width: fit-content;
+  height: fit-content;
+  position:absolute;
+  left: 46%;
+  top: 65px;
+  font-size: 2rem;
+  color: #00ff00;
+  // background-color: #000;
+  font-family: "Press Start 2P", monospace;
+
+}
+
+@media (max-width: 1115px) {
+  .timer {
+    font-size: 1.75rem;
+    left: 45%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1.4rem !important;
+  }
+  
+}
+@media (max-width: 990px) {
+  .timer {
+    font-size: 1.5rem;
+    left: 45%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem !important;
+  }
+  
+}
+@media (max-width: 840px) {
+  .timer {
+    font-size: 1.5rem;
+    left: 44%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem !important;
+  }
+  
+}
+@media (max-width: 700px) {
+  .timer {
+    font-size: 1.5rem;
+    left: 42%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem !important;
+  }
+  
+}
+@media (max-width: 600px) {
+  .timer {
+    font-size: 1.5rem;
+    left: 42%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem !important;
+  }
+  
+}
+@media (max-width: 500px) {
+  .timer {
+    font-size: 1.5rem;
+    left: 40%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem !important;
+  }
+  
+}
+@media (max-width: 410px) {
+  .timer {
+    font-size: 1.5rem;
+    left: 39%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem !important;
+  }
+  
+}
+
+@media (max-width: 385px) {
+  .timer {
+    font-size: 1.5rem;
+    left: 37.5%;
+  }
+
+  .correct-question {
+    width: 100%;
+  }
+
+  .question-text {
+    font-size: 1rem !important;
+  }
+  
+}

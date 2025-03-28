@@ -6,7 +6,7 @@ import { errorHandler } from './middleware/errorsMiddleware.js';
 import userRoutes from './routes/userRoutes.js'
 import questionRoutes from './routes/questionRoutes.js'
 
-const PORT = process.env.PORT;
+const PORT = 5000;
 const server = express();
 
 connectDB();
