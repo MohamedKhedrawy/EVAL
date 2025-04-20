@@ -49,14 +49,14 @@ EVAL/
 ## 📸 Screenshots
 
 <p align="center">
-  <img src="client/public/screenshots/login.png" width="31%" />
-  <img src="public/screenshots/login.png" width="31%" />
-  <img src="public/screenshots/mistake.png" width="31%" />
+  <img src="client/public/screenshots/Register.png" width="31%" />
+  <img src="client/public/screenshots/Test_Params.png" width="31%" />
+  <img src="client/public/screenshots/Posting_Question.png" width="31%" />
 </p>
 
 <p align="center">
-  <img src="public/screenshots/clear-repeats.png" width="48%" />
-  <img src="public/screenshots/login.png" width="48%" />
+  <img src="client/public/screenshots/Dashboard.png" width="48%" />
+  <img src="client/public/screenshots/Test.png" width="48%" />
 </p>
 
 ---
