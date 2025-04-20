@@ -10,9 +10,12 @@ const ClearRepeated = () => {
     const {message, isSuccess, isError} = useSelector((state) => state.question)
 
     const [isCleared, setIsCleared] = useState(false);
+    const [isScope, setIsScope] = useState(false);
 
     useEffect(() => {
         setIsCleared(false);
+        setIsScope(true);
+        
     }, [])
 
     useEffect(() => {
@@ -21,10 +24,10 @@ const ClearRepeated = () => {
             setIsCleared(true);
         }
 
-        if (isError) {
-            console.log(message);
-            setIsCleared(true);
-        }
+        // if (isError) {
+        //     console.log(message);
+        //     setIsCleared(true);
+        // }
     }, [isSuccess, message, isError]) 
 
     const handleClearRepeated = () => {

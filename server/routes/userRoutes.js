@@ -11,8 +11,7 @@ router.post('/register', [
     body('email').normalizeEmail(),
 
     //validation
-    body('name').isAlpha().withMessage('Name must be in alphapetical letters only.')
-    .isLength({min: 5}).withMessage('Name must be at least 5 characters'),
+    body('name').isLength({min: 2}).withMessage('Name must be at least 2 characters'),
     body('email').isEmail().withMessage('Enter a valid email.'),
     body('password').isLength({min: 8}).withMessage('Password must be at least 8 characters.'),
     body('confirmPassword').custom((value, {req}) => {

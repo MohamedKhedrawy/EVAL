@@ -3,9 +3,10 @@ import axios from 'axios'
 
 const register = asyncHandler(async(userData) => {
     try {
-        await axios.post("http://localhost:5000/api/user/register", userData);
+        await axios.post("http://localhost:5000/api/users/register", userData);
+        
     } catch (error) {
-        throw error.response?.data?.message || 'Register Failed'
+        throw error.response?.data?.message
     } 
 })
 

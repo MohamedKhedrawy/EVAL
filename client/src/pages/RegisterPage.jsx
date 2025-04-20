@@ -83,33 +83,41 @@ const RegisterPage = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    setError(false);
     if (!name || !email || !password || !confirmPassword) {
       setErrorMsg("Please fill in all fields");
       setError(true);
+      return;
     }
     if (password.length < 6) {
       setErrorMsg("Password must be at least 6 characters");
       setError(true);
+      return;
     }
     if (password.length > 20) {
       setErrorMsg("Password must be less than 20 characters");
       setError(true);
+      return;
     }
     if (name.length > 20) {
       setErrorMsg("Name must be less than 20 characters");
       setError(true);
+      return;
     }
-    if (name.length < 5) {
-      setErrorMsg("Name must be more than 5 characters");
+    if (name.length < 2) {
+      setErrorMsg("Name must be more than 2+ characters");
       setError(true);
+      return;
     }
     if (email.length > 50) {
       setErrorMsg("Email must be less than 50 characters");
       setError(true);
+      return;
     }
     if (password !== confirmPassword) {
       setErrorMsg("Passwords don't match");
       setError(true);
+      return;
     }
     if (!error) {
       const userData = { name, email, password, confirmPassword };

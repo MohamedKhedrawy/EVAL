@@ -39,10 +39,18 @@ const TestPage = () => {
   }, [params, dispatch]);
 
   useEffect(() => {
+    // don’t do anything until we've actually set a starting time
+    if (testTime === null) return;
+
+    // when time is up
+    if (testTime === 0) {
+      setIsTestOver(true);
+      return;
+    }
 
     let timerInterval;
     
-    if ((testTime > 0)) {
+    if ((testTime > 0) && !isTestOver) {
       timerInterval = setInterval(() => {
         setTestTime((prevTime) => prevTime - 1)
       }, 1000)
@@ -130,7 +138,7 @@ const TestPage = () => {
   const activeOption = (questionIndex, answerIndex) => {
 
     // Select all radio inputs for the current question
-    const answerDivs = document.querySelectorAll(`.test`);
+    const answerDivs = document.querySelectorAll('.test');
 
     // Remove 'checked' class from all answer-option divs
     answerDivs.forEach((input) => {
