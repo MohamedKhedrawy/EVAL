@@ -1,6 +1,6 @@
 # 🧠 EVAL — A Retro-Inspired Quiz App
 
-**EVAL** is a full-stack MERN (MongoDB, Express, React, Node.js) application designed to help students practice more effectively. With a smart test generation system, mistake tracking, and a nostalgic retro interface, studying becomes more personal, targeted, and fun.
+**EVAL** is a full-stack MERN (MongoDB, Express, React, Node.js) application designed to help students practice more effectively with a shared question inventory, smart test generation system, mistake tracking, control over repeated questions and a nostalgic retro interface. 
 
 ---
 
@@ -13,6 +13,18 @@
 - ✅ **Answer Highlighting**: Shows correct answers after submission
 - 🔐 **Authentication**: Secure login/signup with JWT
 - 🌐 **Responsive**: Works smoothly on both desktop and mobile
+
+---
+
+## 💡 Potential Improvements
+
+- 🖼️ **Image Support** — Add the ability to attach images to questions.
+- 👤 **User Profiles** — Personalized dashboards, avatars, and activity stats.
+- 📈 **Reports & Trends** — Visualize learning progress over time.
+- 🧮 **Score Tracking** — Track scores per subject or difficulty level.
+- 💡 **Hints System** — Offer subtle hints before submitting answers.
+- 🏆 **Leaderboards & Awards** — Competitive rankings and achievement badges.
+- ⚔️ **Duels & Wars** — Real-time 1v1 quiz challenges or team-based battles.
 
 ---
 
